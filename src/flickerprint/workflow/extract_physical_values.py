@@ -203,14 +203,14 @@ def process_fourier_file(input_path: Path, output: Path, plotting=True):
         data = dict(
             granule_id=granule_id,
             sigma=sigma,
-            sigma_err = sigma_err,
+            sigma_err=sigma_err,
             kappa_scale=kappa_scale,
             kappa_scale_err=kappa_scale_err,
             mean_radius=mean_radius,
             figure_path=fitting.save_name,
             pass_rate=fitting.pass_rate,
             pass_count=fitting.pass_count,
-            fitting_error= fitting.fitting_error,
+            fitting_error=fitting.fitting_error,
             durbin_watson=fitting.durbin_watson,
             mean_intensity=mean_intensity,
             image_path=str(im_path),
@@ -224,6 +224,7 @@ def process_fourier_file(input_path: Path, output: Path, plotting=True):
             experiment = config("workflow", "experiment_name"),
             timestamp = timestamp,
             above_res_threshold= above_res_threshold,
+            timestamp=float(timestamp),
         )
         if fittingST:
             data["fitting_diff"] = fittingST.fitting_error - fitting.fitting_error

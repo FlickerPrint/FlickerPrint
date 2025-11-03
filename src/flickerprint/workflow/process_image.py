@@ -57,6 +57,7 @@ import os
 import warnings
 import multiprocessing as mp
 from time import sleep
+from skimage import exposure
 
 from flickerprint.common.utilities import strtobool
 import flickerprint.common.boundary_extraction as be
@@ -271,6 +272,15 @@ def process_single_image(
             total_frames = frame.total_frames if max_frame is None else max_frame
             process_bar.reset(total_frames)
 
+        # "gamma_adjust" can be used to enhance the contrast of the image
+        # this acts on the ``frame.im_data`` and so affects both the
+        # granule detection and the boundary drawing.
+        # If this entry is not included in the file, it is ignored
+        gamma = config.try_get_float("image_processing", "gamma_adjust")
+        original_frame = frame.im_data.copy()
+        if gamma is not None and gamma != 0:
+            frame.im_data = exposure.adjust_gamma(frame.im_data, 1.0 / gamma)
+
         if bool(strtobool(config("image_processing", "granule_images"))):
             plot = frame_num % 100 == 0
         else:
@@ -294,7 +304,7 @@ def process_single_image(
         if plot:
             fig, axs = pt.create_axes(2)
             detector.plot(axs[0])
-            axs[1].imshow(frame.im_data)
+            axs[1].imshow(original_frame)
             plot_save_name = (
                 output_dir
                 / f"tracking/detection/{input_image.stem}--F{frame_num:03d}.png"

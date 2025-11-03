@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import configparser as cp
 from pathlib import Path
+from typing import Optional
 
 import strictyaml as yaml
 
@@ -181,6 +182,14 @@ class _Config:
                 merged_dict[key] = merged_val
 
         return merged_dict
+
+    def try_get_float(self, *name) -> Optional[float]:
+        """Attempt to get a value and cast it to float, if this fails return None."""
+        try:
+            return float(self(*name))
+        except ValueError:
+            return None
+
 
 def _pretty_print(values):
     """ Print the configuration file for debugging. """
