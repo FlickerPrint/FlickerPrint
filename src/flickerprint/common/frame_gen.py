@@ -71,6 +71,7 @@ from dataclasses import dataclass
 from functools import wraps
 from pathlib import Path
 import warnings
+import logging
 
 import bioformats as bf
 import javabridge
@@ -152,15 +153,15 @@ def _getType(im_path: Path):
     extentions = im_path.suffixes
     if extentions[-2:] == ['.ome','.tif'] or extentions[-2:] == ['.ome','.tiff']:
         return GeneratorTypes.BIOFORMATS
-    elif extentions[-1] in [".ims",".lif"]:
+    elif extentions[-1] in [".ims",".lif", ".nd2"]:
         return GeneratorTypes.BIOFORMATS
     elif extentions[-1] == "png":
         return GeneratorTypes.PNG
     elif extentions[-1] in [".tiff", ".tif"]:
         return GeneratorTypes.BIOFORMATS
     else:
-        raise ValueError(f"Unable to determine class of image - {im_path}")
-
+        logging.info(f"Unrecognised extension {extentions}, trying bioformats")
+        return GeneratorTypes.BIOFORMATS
 
 def bioformatsGen(im_path):
     """ Load an image from a bioformats file. """
