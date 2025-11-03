@@ -216,7 +216,7 @@ def main(
             else:
                 print("Zipping detection and outline images unsuccessful. Images will be available as separate files instead.")
             subprocess.call(f"cd {output_dir}", shell=True)
-        except:
+        except Exception:
             subprocess.call(f"cd {output_dir}", shell=True)
             print("Zipping detection and outline images unsuccessful. Images will be available as separate files instead.")
     print(f"\n\nFourier analysis complete\n-------------------------\n")
@@ -281,9 +281,9 @@ def process_single_image(
         allow_power_of_five = True
 
         blurrer = glf.DeltaBlurrer(
-            sigmas,
-            plane_shape,
-            fft_len = 2048,
+            sigmas=sigmas,
+            plane_shape = plane_shape,
+            # fft_len = 2048,
             _allow_power_of_five=allow_power_of_five,
             _allow_power_of_three=allow_power_of_three,
         )

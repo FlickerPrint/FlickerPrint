@@ -76,7 +76,7 @@ class GranuleDetectorFFT(gl.GranuleDetector):
 
 def _detect_granules_dog_fft(image, blurrer: "DeltaBlurrer", threshold=0.1, overlap=0):
     fft_blobs = blurrer.difference_of_guassians(
-        image, overlap=overlap, threshold=threshold, threshold_rel=None
+        image, overlap=overlap, threshold=None, threshold_rel=threshold
     )
     return fft_blobs
 
@@ -110,7 +110,8 @@ class _Blurrer(ABC):
         _allow_power_of_five: bool = True,
     ):
         self.sigmas = np.array(sigmas)
-        self.max_sigma_actual = int(self.sigmas.max())
+        # Rounding
+        self.max_sigma_actual = int(self.sigmas.max() + 0.5)
 
         if base_kernel_size is None:
             self.base_kernel_size = int(truncate_length * 2 * self.max_sigma_actual + 1)
@@ -306,14 +307,16 @@ class DeltaBlurrer(_Blurrer):
         overlap: float = 0.5,
         threshold_rel: Optional[float] = None,
     ):
-        """Perform the Difference of Gaussian blob detection.
+        """
+        Perform the Difference of Gaussian blob detection.
+        ==================================================
 
-        Expects an image with dimensions, TYX. FFT works best when the CPU cache can be saturated, so
-        performance gains can be had when T ~ 8 compared to running single planes. Time points are evaluated
-        independently.
+        Expects an image with dimensions, YX.  We've had some luck when the CPU cache can be
+        saturated, so performance gains can be had when T ~ 8 compared to running single planes,
+        however, this messes with the flow program flow quite a lot, so we don't use it for now.
 
-        This returns an array of [Y, X, R, T] values, where Y and X are the coordinates of the blob,
-        R, the approximate radius, and T thetime point the granule is found in.
+        This returns an array of [Y, X, R] values, where Y and X are the coordinates of the blob,
+        and R, the approximate radius.
 
         Parameters match those found in the skimage ``blob_dog`` method, see the ``__init__`` method
         for more info.

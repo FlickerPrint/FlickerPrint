@@ -170,7 +170,6 @@ class GranuleDetector:
 
     def __post_init__(self):
         self.min_size = float(config("image_processing", "granule_minimum_radius"))
-
         self.max_size = float(config("image_processing", "granule_maximum_radius"))
 
     def granules(self, padding=5) -> Iterator[Granule]:
@@ -193,9 +192,6 @@ class GranuleDetector:
         threshold = float(config("image_processing", "granule_minimum_intensity"))
         method = config("image_processing","method")
 
-        min_size = float(config("image_processing", "granule_minimum_radius"))
-        max_size = float(config("image_processing", "granule_maximum_radius"))
-
         if (method == "gradient"):
             self.processed_image = self.frame.im_data
         elif (method == "intensity"):
@@ -206,8 +202,8 @@ class GranuleDetector:
 
         self.granule_locations = _detect_granules_dog( 
                 self.processed_image,
-                min_size,
-                max_size,
+                self.min_size,
+                self.max_size,
                 self.frame.pixel_size,
                 threshold=threshold,
             ) 
