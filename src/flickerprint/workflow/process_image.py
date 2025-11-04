@@ -290,6 +290,12 @@ def process_single_image(
         else:
             plot_frame = False
 
+        # I've found the individual plotting of granule boundaries to be much less helpful than the
+        # frame overview (and take much more space), so splitting the varibles here. For now this
+        # just behaves as an easy place to override this, but could be moved out to the config
+        # later.
+        plot_granules = plot_frame
+
         detector = detector_function(frame)
 
         # Detect the granules within the frame
@@ -352,9 +358,6 @@ def process_single_image(
 
         # Tidy these Fourier terms per frame
         # This is an iterative function that reuses results from the previous frames.
-        
-        # TODO: Add the plot granules into the config
-        plot_granules = False
         try:
             aggregate_terms = be.collect_fourier_terms(
                 granule_boundries, frame, granule_tracker, plot_granules, output_dir
