@@ -100,18 +100,12 @@ class _Blurrer(ABC):
         plane_shape,
         truncate_length: int = 4,
         fft_len: Optional[int] = None,
-        base_kernel_size: Optional[int] = None,
         _allow_power_of_three: bool = True,
         _allow_power_of_five: bool = True,
     ):
         self.sigmas = np.array(sigmas)
-        # Rounding
         self.max_sigma_actual = int(self.sigmas.max() + 0.5)
-
-        if base_kernel_size is None:
-            self.base_kernel_size = int(truncate_length * 2 * self.max_sigma_actual + 1)
-        else:
-            self.base_kernel_size = base_kernel_size
+        self.base_kernel_size = int(truncate_length * 2 * self.max_sigma_actual + 1)
 
         if fft_len is None:
             largest_image_dim = np.max(plane_shape)
@@ -265,9 +259,10 @@ class DeltaBlurrer(_Blurrer):
     -----------
 
     By default, we follow scikit convention and use 4 standard deviations (of the largest sigma) as
-    the cut-off for the Gaussian kernel. The FFT approach is much less sensitive to the size of the
-    kernel, unless this means crossing over a new ``fft_len`` boundary. Tweaking this might lead to
-    a small improvement in performance at the cost of accuracy.
+    the cut-off for the Gaussian kernel (as given by the ``truncate_length`` keyword). The FFT
+    approach is much less sensitive to the size of the kernel, unless this means crossing over a new
+    ``fft_len`` boundary. Tweaking this might lead to a small improvement in performance at the
+    cost of accuracy.
 
     """
 
