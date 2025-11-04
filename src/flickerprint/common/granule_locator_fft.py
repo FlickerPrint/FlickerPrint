@@ -26,11 +26,6 @@ often requires an image of size $2^{N+1}$, significantly slowing things down.
 Instead, we can pad the image to size $3 * 2^{N-1}$ or $5 * 2^{N-2}$ instead, which are typically
 slightly faster than the larger $2^{N+1}$ sizes.
 
-Performance Notes
------------------
-
-We might get some performance increase by caching the kernels
-
 """
 
 import itertools

@@ -256,45 +256,20 @@ def process_single_image(
 
     validate_args(input_image, output_dir, quiet)
     # Making the generator peekable allows us to get the first item for metadata without advancing
-    # the iterator, looking at the implementation, this shouldn't cost us any extra
+    # the iterator. Looking at the implementation, this shouldn't cost us any extra
     # memory/performance
     image_frames = peekable(fg.gen_opener(input_image))
     
-    use_fft = False
+    use_fft = True
     if use_fft:
         frame = image_frames.peek()
-        # We only the need to convolve the kernels once (creating the ``blurrer`` object), so
-        # we do it at the start. This is a slightly spicy way of doing this without breaking the
-        # workflow elsewhere.
-        plane_shape = frame.im_data.shape
-
-        min_size = float(config("image_processing", "granule_minimum_radius"))
-        max_size = float(config("image_processing", "granule_maximum_radius"))
-
-        pixel_size = frame.pixel_size
-        min_sigma = gl._convertToSigma(min_size, pixel_size)
-        max_sigma = gl._convertToSigma(max_size, pixel_size)
-        sigmas = glf.generate_sigmas(min_sigma, max_sigma)
-
-        # TODO: Move the allow_power parameters into the config
-        allow_power_of_three = True
-        allow_power_of_five = True
-
-        blurrer = glf.DeltaBlurrer(
-            sigmas=sigmas,
-            plane_shape = plane_shape,
-            # fft_len = 2048,
-            _allow_power_of_five=allow_power_of_five,
-            _allow_power_of_three=allow_power_of_three,
-        )
-        detector_factory = partial(glf.GranuleDetectorFFT, blurrer=blurrer)
+        blurrer = _get_blurrer(frame)
+        detector_function = partial(glf.GranuleDetectorFFT, blurrer=blurrer)
     else:
-        detector_factory = gl.GranuleDetector
+        detector_function = gl.GranuleDetector
 
 
     fourier_frames = []
-    granule_ids = None
-    positions = None
     max_distance = float(config("image_processing", "tracking_threshold"))
     granule_tracker = be._GranuleLinker(memory=10,max_distance=max_distance)
 
@@ -316,7 +291,7 @@ def process_single_image(
         else:
             plot_frame = False
 
-        detector = detector_factory(frame)
+        detector = detector_function(frame)
 
         # Detect the granules within the frame
         try:
@@ -482,6 +457,42 @@ def write_hdf(save_path: Path, fourier_frames: pd.DataFrame, frame_data):
             config_yaml, _ = config._aggregate_all()
             fourier_hdf.attrs["config"] = config_yaml
             fourier_hdf.attrs["version"] = version.__version__
+
+def _get_blurrer(frame) -> glf.DeltaBlurrer:
+    """Precomputes the kernels required for the FFT deconvolution."""
+    plane_shape = frame.im_data.shape
+
+    min_size = float(config("image_processing", "granule_minimum_radius"))
+    max_size = float(config("image_processing", "granule_maximum_radius"))
+
+    pixel_size = frame.pixel_size
+    min_sigma = gl._convertToSigma(min_size, pixel_size)
+    max_sigma = gl._convertToSigma(max_size, pixel_size)
+    sigmas = glf.generate_sigmas(min_sigma, max_sigma)
+
+    # In theory, there is some performance penalty for running at size (k * 2**N), where k is
+    # a small prime, compared to a pure power of two, but the increase in required size means
+    # that the small prime case has been faster in all cases I've tested. 
+    allow_power_of_three = True
+    allow_power_of_five = True
+
+    # Keeping the FFT same size as the image can give siginificant speedups, but at the cost of
+    # significant errors around the edges. ENABLE AT YOUR OWN RISK.
+    trim_fft = False
+    if trim_fft:
+        fft_len = max(plane_shape)
+    else:
+        fft_len = None
+
+    blurrer = glf.DeltaBlurrer(
+        sigmas=sigmas,
+        plane_shape = plane_shape,
+        fft_len = fft_len,
+        _allow_power_of_five=allow_power_of_five,
+        _allow_power_of_three=allow_power_of_three,
+    )
+    return blurrer
+
 
 if __name__ == "__main__":
     args = parse_arguments()
