@@ -260,14 +260,13 @@ def process_single_image(
     # memory/performance
     image_frames = peekable(fg.gen_opener(input_image))
     
-    use_fft = True
+    use_fft = bool(strtobool(config("image_processing", "use_fft")))
     if use_fft:
         frame = image_frames.peek()
         blurrer = _get_blurrer(frame)
         detector_function = partial(glf.GranuleDetectorFFT, blurrer=blurrer)
     else:
         detector_function = gl.GranuleDetector
-
 
     fourier_frames = []
     max_distance = float(config("image_processing", "tracking_threshold"))
@@ -327,7 +326,7 @@ def process_single_image(
             axis_len = max(frame.im_data.shape)
             tick_spacing = 256 if axis_len > 2000 else 128
 
-            titles = ["Detected", "Original", "Adjusted"]
+            titles = ["Detected", "Original"]
 
             for ax, title in zip(axs, titles):
                 ax.set_title(title)

@@ -77,6 +77,12 @@ image_processing:
   ##  False: Do not save images of the granules
   granule_images: False
 
+  ## Use FFT Blurring
+  ##   The Difference of Guassian used to locate the granules requries that we perform many
+  ##   blurring operations, for larger images (2048×2048) our FFT based convolution is significantly
+  ##   faster than the naive approach, with no change in accuracy.
+  use_fft: False
+
 spectrum_fitting:
   ## Experimental spectrum used to fit the theoretical model
   ##   direct: Use the magnitude squared directly

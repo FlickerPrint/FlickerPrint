@@ -41,7 +41,8 @@ SCHEMA = yaml.Map(
                 "granule_minimum_intensity": yaml.Float(),
                 "fill_threshold": yaml.Float(),
                 "tracking_threshold": yaml.Float(),
-                "granule_images": yaml.Bool()
+                "granule_images": yaml.Bool(),
+                "use_fft": yaml.Bool(),
             }
         ),
         "spectrum_fitting": yaml.Map(
