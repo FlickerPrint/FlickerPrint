@@ -108,6 +108,8 @@ def set_labels(axs, ylabels=None, xlabels=None, **fontkwargs):
     We use the in-built methods on the axes to create y-labels on the left most
     axes and add x-labels to the bottom row.
     """
+    if not isinstance(axs, Iterable):
+        axs = [axs]
     for ax in axs:
         if ylabels is not None and ax.get_subplotspec().is_first_col():
             ax.set_ylabel(ylabels, **fontkwargs)
