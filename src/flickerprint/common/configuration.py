@@ -43,6 +43,7 @@ SCHEMA = yaml.Map(
                 "tracking_threshold": yaml.Float(),
                 "granule_images": yaml.Bool(),
                 "use_fft": yaml.Bool(),
+                "gamma_adjust": yaml.Float()
             }
         ),
         "spectrum_fitting": yaml.Map(

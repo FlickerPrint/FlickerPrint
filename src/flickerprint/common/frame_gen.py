@@ -67,7 +67,8 @@ MicroscopeFrame
 import datetime
 import enum
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass
+from typing import Optional
+from dataclasses import dataclass, field
 from functools import wraps
 from pathlib import Path
 import warnings
@@ -105,6 +106,7 @@ class MicroscopeFrame:
     pixel_size: float = 1.0
     actual_pixel_size: bool = True
     actual_timestamp: bool = False
+    enhanced_image: Optional[np.ndarray] = field(init=False, default=None)
 
     @property
     def summaryRow(self):

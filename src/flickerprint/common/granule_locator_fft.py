@@ -52,9 +52,12 @@ class GranuleDetectorFFT(gl.GranuleDetector):
 
         threshold = float(config("image_processing", "granule_minimum_intensity"))
         method = config("image_processing", "method")
-
         if method == "gradient":
-            self.processed_image = self.frame.im_data
+            if self.frame.enhanced_image is not None:
+                self.processed_image = self.frame.enhanced_image
+            else:
+                self.processed_image = self.frame.im_data
+
         elif method == "intensity":
             self.processed_image = gl._process_vesicles(self.frame.im_data)
         else:

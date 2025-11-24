@@ -83,6 +83,13 @@ image_processing:
   ##   faster than the naive approach, with no change in accuracy.
   use_fft: False
 
+  ## Gamma Adjustment
+  ##   A gamma adjustment >1 may help improve contrast , which can be useful for locating dim
+  ##   granules. The default value of 0.0 will disable this.  We note this this will only affect the
+  ##   granule detection step, the detailed boundary detection used to get the fluctuation spectrum
+  ##   will remain unchanged.
+  gamma_adjust: 0.0
+
 spectrum_fitting:
   ## Experimental spectrum used to fit the theoretical model
   ##   direct: Use the magnitude squared directly

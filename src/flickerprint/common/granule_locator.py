@@ -193,7 +193,11 @@ class GranuleDetector:
         method = config("image_processing","method")
 
         if (method == "gradient"):
-            self.processed_image = self.frame.im_data
+            if self.frame.enhanced_image is not None:
+                self.processed_image = self.frame.enhanced_image
+            else:
+                self.processed_image = self.frame.im_data
+
         elif (method == "intensity"):
             self.processed_image = _process_vesicles(self.frame.im_data)
         else:

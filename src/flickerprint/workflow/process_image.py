@@ -59,6 +59,7 @@ import warnings
 import multiprocessing as mp
 from time import sleep
 from more_itertools import peekable
+from skimage import exposure
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -279,6 +280,8 @@ def process_single_image(
     disable_bar = True if quiet else None
     process_bar = tqdm.tqdm(enumerate(image_frames), disable=disable_bar, position=_pbar_pos, unit="frame", desc=f"#{_pbar_pos+1}")
 
+    gamma = float(config("image_processing", "gamma_adjust"))
+
     for frame_num, frame in process_bar:
         # Update the progress bar to account for the number of frames
         if frame_num == 0 and not quiet:
@@ -287,6 +290,14 @@ def process_single_image(
 
         if bool(strtobool(config("image_processing", "granule_images"))):
             plot_frame = frame_num % 100 == 0
+
+            figure_dir = output_dir / "tracking"
+            figure_dir.mkdir(exist_ok=True)
+            detection_dir = figure_dir / "detection"
+            detection_dir.mkdir(exist_ok=True)
+
+            outline_dir = figure_dir / "outline"
+            outline_dir.mkdir(exist_ok=True)
         else:
             plot_frame = False
 
@@ -296,6 +307,8 @@ def process_single_image(
         # later.
         plot_granules = plot_frame
 
+        if gamma is not None and gamma > 0.0:
+            frame.enhanced_image = exposure.adjust_gamma(frame.im_data, 1.0 / gamma)
         detector = detector_function(frame)
 
         # Detect the granules within the frame
@@ -310,13 +323,6 @@ def process_single_image(
             else:
                 continue
 
-        figure_dir = output_dir / "tracking"
-        figure_dir.mkdir(exist_ok=True)
-        detection_dir = figure_dir / "detection"
-        detection_dir.mkdir(exist_ok=True)
-
-        outline_dir = figure_dir / "outline"
-        outline_dir.mkdir(exist_ok=True)
 
         # Show the detected granules in the image
         if plot_frame:
@@ -374,11 +380,12 @@ def process_single_image(
     fourier_frames_pd = pd.concat(fourier_frames, ignore_index=True)
     # fourier_table = consolidate_fourier_terms(fourier_frames_pd)
 
-    # Save a .csv file for debugging
-    save_name = f"fourier/{input_image.stem}"
+    fourier_dir = output_dir / "fourier"
+    fourier_dir.mkdir(exist_ok=True)
+    save_name = input_image.stem
     if max_frame is not None:
         save_name += "--DEBUG"
-    save_path = output_dir / (save_name + ".h5")
+    save_path = fourier_dir / f"{save_name}.h5"
 
     # Save a HDF5 file for better long-term storage with metadata
     frame_data = {
