@@ -499,7 +499,8 @@ class _GranuleLinker:
         #Otherwise, link
         n_granules = len(positions)
         n_stored = len(self._stored_positions)
-        labels = np.zeros(n_granules, dtype=int)
+        # Labels are set to a "bad" initial value, so we can catch the unmatched labels later
+        labels = np.ones(n_granules, dtype=int) * -1
         if n_granules < 1:
             raise GranuleNotFoundError
 
@@ -537,6 +538,14 @@ class _GranuleLinker:
             self._stored_labels = np.append(self._stored_labels,tail_labels)
             self._stored_positions = np.append(self._stored_positions,unhandled,axis=0)
             self.max_id += len(unhandled)
+
+            # Fill in unhandled granule IDs
+            tail_index = 0
+            for i in range(len(labels)):
+                if labels[i] == -1:
+                    labels[i] = tail_labels[tail_index]
+                    tail_index += 1
+
 
         #handle missing granules
         missing = [i for i,x in enumerate(handled_stored) if x == False] #position in _storedlists
