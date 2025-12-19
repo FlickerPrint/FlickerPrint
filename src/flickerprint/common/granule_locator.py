@@ -112,9 +112,9 @@ class Granule:
 
         # Account for the boundary cases
         x_new_min = max(x_min - padding, 0)
-        x_new_max = min(x_max + padding, self._im_width - 1)
+        x_new_max = min(x_max + padding, self._im_height - 1)
         y_new_min = max(y_min - padding, 0)
-        y_new_max = min(y_max + padding, self._im_height - 1)
+        y_new_max = min(y_max + padding, self._im_width - 1)
 
         return x_new_min, y_new_min, x_new_max, y_new_max
 
