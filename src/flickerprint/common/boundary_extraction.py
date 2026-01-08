@@ -176,6 +176,13 @@ class BoundaryExtraction:
         angles = np.linspace(0, 2 * np.pi, n_angles, endpoint=False)
         radii = np.zeros_like(angles)
 
+        precalculate_spline = True
+        if precalculate_spline:
+            spline_image = ndi.spline_filter(input=self.processed_image, order=order)
+            image_to_process = spline_image
+        else:
+            image_to_process = self.processed_image
+
         for num, angle in enumerate(angles):
             sample_length = self.granule.crop_width
             sample_count = int(sample_length) * samples_per_pixel
@@ -184,8 +191,9 @@ class BoundaryExtraction:
                 angle=angle,
                 sample_length=sample_length,
                 sample_count=sample_count,
-                im=self.processed_image,
+                im=image_to_process,
                 order=order,
+                is_spline_image=precalculate_spline
             )
             peak_location = self._get_peak_location(sample)
             radii[num] = peak_location
@@ -224,7 +232,7 @@ class BoundaryExtraction:
         interpolation_coords = np.vstack((x, y))
         return interpolation_coords
 
-    def _sample_at_angle(self, angle, sample_length, sample_count, im=None, order=3):
+    def _sample_at_angle(self, angle, sample_length, sample_count, im, order=3, is_spline_image: bool = False):
         """ Sample the image at a given number of points.
 
         Parameters
@@ -236,9 +244,13 @@ class BoundaryExtraction:
         sample_count: int
             Total number of samples in the returned value.
         im:
-            The image to sample, this defaults to the unedited image.
+            The image to sample
         order:
             Polynomial order of the estimation.
+        is_spline_image: bool
+            Has the image already been passed through ``spline_filter`` this should allow us to
+            avoid us repeating some work
+            
 
         Returns
         -------
@@ -246,14 +258,13 @@ class BoundaryExtraction:
             Interpolated values.
 
         """
-        if im is None:
-            raise Exception("image is empty in boundary_extraction line 250")
-
         interpolationCoords = self._get_interploation_coordinates(
-            angle=angle, sample_length=sample_length, sample_count=sample_count,
+            angle=angle, sample_length=sample_length, sample_count=sample_count
         )
 
-        zi = ndi.map_coordinates(im, interpolationCoords, order=order)
+        # The ``prefilter`` keyword is a bit counter-intuitive, it is True when the
+        # values need to be calculated, ie we don't use the cache.
+        zi = ndi.map_coordinates(im, interpolationCoords, order=order, prefilter=not is_spline_image)
         return zi
 
     @staticmethod
