@@ -183,33 +183,37 @@ class GranuleDetector:
         for row in granule_table.itertuples():
             yield Granule(self.frame.im_data, row, padding=padding)
 
-    def labelGranules(self):
+    def labelGranules(self, intensity_threshold=None, method=None, min_size=None, max_size=None, fill_threshold=None):
         """Label the granules within the images.
 
         This creates an integer array with each granules labeled with a difference
         integer.
         """
 
-        threshold = float(config("image_processing", "granule_minimum_intensity"))
-        method = config("image_processing","method")
+        self.intensity_threshold = float(config("image_processing", "granule_minimum_intensity")) if intensity_threshold is None else intensity_threshold
+        self.method = config("image_processing","method") if method is None else method
 
-        min_size = float(config("image_processing", "granule_minimum_radius"))
-        max_size = float(config("image_processing", "granule_maximum_radius"))
+        self.min_size = float(config("image_processing", "granule_minimum_radius")) if min_size is None else min_size
+        self.max_size = float(config("image_processing", "granule_maximum_radius")) if max_size is None else max_size
+        self.fill_threshold = float(config("image_processing", "fill_threshold")) if fill_threshold is None else fill_threshold
 
-        if (method == "gradient"):
+        if self.min_size >= self.max_size:
+            raise ValueError("The condensate minimum size must be smaller than the maximum size.")
+
+        if (self.method == "gradient"):
             self.processed_image = self.frame.im_data
-        elif (method == "intensity"):
+        elif (self.method == "intensity"):
             self.processed_image = _process_vesicles(self.frame.im_data)
         else:
-            raise ValueError("no granule detection method {}".format(method))
+            raise ValueError("no granule detection method {}".format(self.method))
 
 
         self.granule_locations = _detect_granules_dog( 
                 self.processed_image,
-                min_size,
-                max_size,
+                self.min_size,
+                self.max_size,
                 self.frame.pixel_size,
-                threshold=threshold,
+                threshold=self.intensity_threshold,
             ) 
 
         self.labelled_granules = self._fillGranules()
@@ -309,12 +313,11 @@ class GranuleDetector:
         if it's too large.
 
         """
-        min_intensity_lim = float(config("image_processing", "granule_minimum_intensity"))
+        min_intensity_lim = self.intensity_threshold
 
-        threshold = float(config("image_processing", "fill_threshold"))
+        threshold = self.fill_threshold
 
-        method = config("image_processing","method")
-
+        method = self.method
         x, y, r = blob
         x = int(x)
         y = int(y)

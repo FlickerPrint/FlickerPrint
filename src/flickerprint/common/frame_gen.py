@@ -164,6 +164,9 @@ def _getType(im_path: Path):
 
 def bioformatsGen(im_path):
     """ Load an image from a bioformats file. """
+
+    if not JAVAVM_STARTED:
+        startVM()
     # Get some metadata from the OMEXML data
     try:
         md = bf.get_omexml_metadata(str(im_path))

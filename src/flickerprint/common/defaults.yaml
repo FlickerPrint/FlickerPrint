@@ -31,7 +31,7 @@ image_processing:
   ##    if the metadata is missing or incomplete. This is especially
   ##    important for bare image files (ie. .tiff). You will recieve
   ##    a warning if this value is used.
-  pixel_size: 0.1408
+  pixel_size: 0.0
 
   ## Method for drawing the boundary, these are:
   ##   gradient: Find the maximum of the directional gradient
