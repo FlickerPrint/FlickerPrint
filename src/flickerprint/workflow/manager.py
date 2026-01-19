@@ -14,6 +14,7 @@ from shiny import run_app
 from flickerprint.workflow import process_image, extract_physical_values, bayesian_optimisation
 from flickerprint.common import create_project_dir
 from flickerprint.analysis import cli_analysis, gui
+from flickerprint.tools import parameter_selector_gui
 import flickerprint.version as version
 
 
@@ -30,6 +31,12 @@ def run_gui():
     gui_path  = dirname(gui.__file__)
     print(gui_path)
     run_app('app:app', app_dir=str(gui_path))
+
+def run_parameter_selector_gui():
+    """A helper function for starting the parameter selection graphical user interface."""
+    parameter_selector_gui_path = dirname(parameter_selector_gui.__file__)
+    print(parameter_selector_gui_path)
+    run_app('app:app', app_dir=str(parameter_selector_gui_path))
 
 def parse_arguments():
     """ Read command line arguments.
@@ -187,6 +194,14 @@ def parse_arguments():
         "-i", "--img_path_filter", type=str, help="Filter the image paths."
     )
     parser_cli_graph.set_defaults(func=cli_analysis.main)
+
+    #
+    # Parameter Selection GUI
+    #
+    parser_parameter_selector_gui = subparsers.add_parser(
+        "parameter-selection", help="Start the parameter selection graphical user interface."
+    )
+    parser_parameter_selector_gui.set_defaults(func=run_parameter_selector_gui)
 
 
     return parser.parse_args()
