@@ -173,7 +173,7 @@ def check_Java():
         print(f"Java is not available in the PATH. Attempting to locate Java...")
         java_home, updated_path = check_default_Java_locations()
         if updated_path is None:
-            print(f"Unable to determine the location of your Java installation.\nPlease ensure that you have installed Java before continuing.\nFor more information, refer to the FlickerPrint documentation.")
+            print(f"Unable to determine the location of your Java installation.\nPlease ensure that you have installed Java before continuing.\nIf Java is installed, ensure that JAVA_HOME and PATH are set.\nFor more information, refer to the FlickerPrint documentation.")
             print(f"##############################################################\n")
             return False
         else:

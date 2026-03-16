@@ -260,6 +260,42 @@ class SpectrumFitterBuilder_ST_Only(SpectrumFitterBuilder):
             "sigma_ST_bar_err": errors[0],
             "fitting_error_ST": best_fit_value,
         }
+    
+class SpectrumFitterBuilder_Br_Only(SpectrumFitterBuilder):
+
+    # This one is even easier as we can precompute just about everything.
+    def __init__(self, q_max: int = 15, l_max: int = 75):
+        self.q_max = q_max
+        self.a_ql = self._get_numerator_factor(self.q_max, l_max)
+        self.b_l = self._get_constant_l_terms(l_max)
+
+    def get_spectra(self, kappa_bar: float):
+        """Calculate the given theoretical spectrum for the given σ and κ."""
+        out = self.a_ql/(self.b_l * kappa_bar)
+        return out.sum(axis=1)
+    
+    def create_fitting_function(
+        self, spectrum_experimental: np.ndarray
+    ) -> Tuple[Callable, Callable]:
+        """Create a function that returns the error between the experimental and theoretical spectrum."""
+
+        def residuals(fitting_params):
+            kappa_bar = fitting_params
+            spectrum_theory = self.get_spectra(kappa_bar)
+            relative_errors = np.log10(np.abs(spectrum_theory / spectrum_experimental))
+            return relative_errors
+
+        def fitting_error(fitting_params):
+            residual_vals = residuals(fitting_params)
+            return np.sum(residual_vals**2, axis=-1)
+        return residuals, fitting_error
+    
+
+    @classmethod
+    def _get_base_l_terms(cls, l_max: int = 60):
+        l = np.arange(2, l_max + 1)
+        return (l - 1) * l * (l + 1) * (l + 2)
+        
 
 
 def _numerator_factor(q_vec: np.ndarray, l_vec: np.ndarray):
