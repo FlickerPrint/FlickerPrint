@@ -430,6 +430,8 @@ def _detect_granules_dog(
         [(x, y, r), ...] : return the center points of the granules.
 
     """
+    if pixel_size is None or pixel_size <= 0:
+        raise ValueError("Pixel size must be a positive number. Please set the pixel size manually.")
     min_sigma = _convertToSigma(min_size, pixel_size)
     max_sigma = _convertToSigma(max_size, pixel_size)
 

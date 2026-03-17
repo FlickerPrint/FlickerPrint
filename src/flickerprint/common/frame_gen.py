@@ -133,7 +133,7 @@ class GeneratorTypes(enum.Enum):
     PNG = 3
 
 
-def gen_opener(im_path):
+def gen_opener(im_path, _pixel_size=None):
     """Return a generator based on the provided ``image_path``.
 
     For now we simply search for the correct extension.
@@ -142,7 +142,7 @@ def gen_opener(im_path):
     im_path = Path(im_path)
     image_type = _getType(im_path)
     if image_type == GeneratorTypes.BIOFORMATS:
-        return bioformatsGen(im_path)
+        return bioformatsGen(im_path, _pixel_size=_pixel_size)
     else:
         raise NotImplementedError("Currently not handling not-bioformats files.")
 
@@ -155,14 +155,14 @@ def _getType(im_path: Path):
     elif extentions[-1] in [".ims",".lif"]:
         return GeneratorTypes.BIOFORMATS
     elif extentions[-1] == "png":
-        return GeneratorTypes.PNG
+        return GeneratorTypes.BIOFORMATS
     elif extentions[-1] in [".tiff", ".tif"]:
         return GeneratorTypes.BIOFORMATS
     else:
         return GeneratorTypes.BIOFORMATS
 
 
-def bioformatsGen(im_path):
+def bioformatsGen(im_path, _pixel_size=None):
     """ Load an image from a bioformats file. """
 
     if not JAVAVM_STARTED:
@@ -178,7 +178,10 @@ def bioformatsGen(im_path):
     pixelData = o.image().Pixels
     pixel_size = pixelData.PhysicalSizeX #in microns
     if pixel_size == None:
-        pixel_size = float(config("image_processing", "pixel_size"))
+        if _pixel_size is not None:
+            pixel_size = _pixel_size
+        else:
+            pixel_size = float(config("image_processing", "pixel_size"))
         warnings.warn(f"Warning: pixel size missing from metadata, falling back on value in config file: {pixel_size} microns.")
         pixel_units = "µm"
     else:

@@ -51,7 +51,7 @@ def locator_module_ui():
                         value='0.0', 
                         placeholder='0.0'
                     ),
-                    "When working with .tif[f] files, please enter the pixel size to enable accurate physical measurements.",
+                    "If your micrographs do not contain pixel size metadata, please enter it here to ensure accurate measurements.",
                     id="pixel_size_tool_tip",
                     options={
                         "show":True
@@ -63,65 +63,137 @@ def locator_module_ui():
             ui.column(8,
                 ui.row(
                     ui.card(
+                        ui.h4("Image Analysis Parameters", style="margin-bottom: -5px;"),
                         ui.layout_column_wrap(
-                            *[ui.input_slider(
-                                id = param["id"],
-                                label = param["label"],
-                                min = param["min"],
-                                max = param["max"],
-                                value = param["value"],
-                                step = param["step"],
-                                post=param["post"]) for param in parameters],
-                            ui.input_select(
-                                id = "detection_method",
-                                label = "Detection Method",
-                                choices = ["gradient", "intensity"],
-                                selected = "gradient",
-                                multiple=False),
-                                min_width="250px"
+                            *[ui.layout_column_wrap(
+                                ui.h6(param["label"],
+                                       ),
+                                ui.row(
+                                    ui.column(8,
+                                        ui.input_slider(
+                                            id = param["id"],
+                                            label = "",
+                                            min = param["min"],
+                                            max = param["max"],
+                                            value = param["value"],
+                                            step = param["step"],
+                                            post=param["post"])
+                                    ),
+                                    ui.column(4,
+                                        ui.input_text(
+                                            id = f"{param['id']}_text",
+                                            label = "",
+                                            value = str(param["value"]),
+                                            placeholder = str(0.0)
+                                        )
+                                    ),
+                                    style="margin-top: -15px;",
+                                ),
+                                width="100%"
+                         ) for param in parameters],
+                            ui.layout_column_wrap(
+                                ui.h6("Detection Method", style="margin-bottom: -10px;"),
+                                ui.row(
+                                ui.input_select(
+                                    id = "detection_method",
+                                    label = "",
+                                    choices = ["gradient", "intensity"],
+                                    selected = "gradient",
+                                    multiple=False,
+                                    ),
+                                    style="margin-top: -15px;"
+                                ),
+                                width="100%",
+                            ),
+                            min_width="250px"
                         )
                     )
                 ),
                 ui.row(
                     ui.card(
+                        ui.h4("Additional Parameters", style="margin-bottom: -5px;"),
                         ui.layout_column_wrap(
-                            ui.input_text(
+                            ui.layout_column_wrap(
+                                ui.h6("Image Path", style="margin-bottom: -10px;"),
+                                ui.row(
+                                ui.input_text(
                                 id='image_path',
-                                label='Image Path',
+                                label='',
                                 value='default_images',
                                 placeholder='default_images'
                             ),
-                            ui.input_text(
+                                style="margin-top: -15px;"
+                                ),
+                                width="100%",
+                            ),
+                           ui.layout_column_wrap(
+                                ui.h6("Image Regular Expression", style="margin-bottom: -10px;"),
+                                ui.row(
+                                ui.input_text(
                                 id='image_regex',
-                                label='Image Regular Expression',
+                                label='',
                                 value='*',
                                 placeholder='*'
                             ),
-                            ui.input_text(
-                                id='experiment_name',
-                                label='Experiment Name',
-                                value='experiment_name',
-                                placeholder='experiment_name'
+                                style="margin-top: -15px;"
+                                ),
+                                width="100%",
                             ),
-                            ui.input_text(
+                            ui.layout_column_wrap(
+                                ui.h6("Experiment Name", style="margin-bottom: -10px;"),
+                                ui.row(
+                                    ui.input_text(
+                                        id='experiment_name',
+                                        label='',
+                                        value='experiment_name',
+                                        placeholder='experiment_name'
+                                    ),
+                                    style="margin-top: -15px;"
+                                ),
+                                width="100%",
+                            ),
+                            ui.layout_column_wrap(
+                                ui.h6("Experiment Temperature (ºC)", style="margin-bottom: -10px;"),
+                                ui.row(
+                                ui.input_text(
                                 id='temperature',
-                                label='Experiment Temperature (ºC)',
+                                label='',
                                 value='37',
+						        placeholder='37',
                             ),
-                            ui.input_select(
+                                style="margin-top: -15px;"
+                                ),
+                                width="100%",
+                            ),
+                            ui.layout_column_wrap(
+                                ui.h6("Plot Detector Images", style="margin-bottom: -10px;"),
+                                ui.row(
+                                ui.input_select(
                                 id='granule_images',
-                                label='Plot Detector Images',
+                                label='',
                                 choices=['True', 'False'],
                                 selected='False',
                                 multiple=False
                             ),
-                            ui.input_select(
+                                style="margin-top: -15px;"
+                                ),
+                                width="100%",
+                            ),
+                            ui.layout_column_wrap(
+                                ui.h6("Plot Fluctuation Spectra", style="margin-bottom: -10px;"),
+                                ui.row(
+                                ui.input_select(
                                 id='plot_spectra_and_heatmaps',
-                                label='Plot Fluctuation Spectra',
+                                label='',
                                 choices=['True', 'False'],
                                 selected='False',
                                 multiple=False
                             ),
+                                style="margin-top: -15px;"
+                                ),
+                                width="100%",
+                            ),
+
                             min_width="250px"
                         )
                     )
@@ -245,7 +317,7 @@ def locator_module_server(input: Inputs, output: Outputs, session: render, micro
         ui.update_slider("intensity_threshold_slider", value=params["intensity_threshold_slider"], session=session)
 
     @reactive.Effect
-    @reactive.event(input.image_selector, input.frame_number)
+    @reactive.event(input.image_selector, input.frame_number, input.pixel_size)
     def update_selected_frame():
         """
             Updates the selected frame based on the selected image and frame number.
@@ -256,15 +328,16 @@ def locator_module_server(input: Inputs, output: Outputs, session: render, micro
             return
         
         selected_image_name = input.image_selector()
-        input_frame_number = 1 if input.frame_number() is '' else input.frame_number()
+        input_frame_number = 1 if input.frame_number() == '' else input.frame_number()
         frame_number = int(input_frame_number) - 1 # Convert to 0-based index
+        pixel_size = float(input.pixel_size()) if input.pixel_size() != '' else None
 
         if selected_image_name not in files:
             return
         
         image_path = files[selected_image_name]
         try:
-            image_frames = islice(fg.gen_opener(image_path), frame_number, frame_number + 1)
+            image_frames = islice(fg.gen_opener(image_path, _pixel_size=pixel_size), frame_number, frame_number + 1)
             frame = next(image_frames)
         except Exception as e:
             m = ui.modal(
@@ -395,3 +468,39 @@ def locator_module_server(input: Inputs, output: Outputs, session: render, micro
             microscope_image_reactive_value.set(files)
         ui.update_selectize(id="image_selector", choices=list(files.keys()), selected=None)
         ui.modal_remove()
+
+    # Only sync text input to slider if the slider value is not being changed (slider takes priority)
+    last_slider_values = {param["id"]: param["value"] for param in parameters}
+
+    @reactive.Effect
+    @reactive.event(*[input[f"{param['id']}"] for param in parameters])
+    def sync_sliders_with_text_inputs():
+        """
+            Syncs the slider values with the corresponding text input values.
+            Slider value always takes priority.
+        """
+        for param in parameters:
+            slider_value = input[param["id"]]()
+            text_input_id = f"{param['id']}_text"
+            last_slider_values[param["id"]] = slider_value
+            ui.update_text(text_input_id, value=str(slider_value), session=session)
+
+    @reactive.Effect
+    @reactive.event(*[input[f"{param['id']}_text"] for param in parameters])
+    def sync_text_inputs_with_sliders():
+        """
+            Syncs the text input values with the corresponding slider values,
+            but only if the slider value has not changed since last sync.
+        """
+        for param in parameters:
+            text_input_value = input[f"{param['id']}_text"]()
+            slider_id = param["id"]
+            try:
+                numeric_value = float(text_input_value)
+                # Only update slider if its value matches the last synced value (i.e., user hasn't moved slider)
+                if input[slider_id]() == last_slider_values[slider_id] and numeric_value != input[slider_id]() and numeric_value != 0.0:
+                    ui.update_slider(slider_id, value=numeric_value, session=session)
+            except ValueError:
+                pass
+
+                    
