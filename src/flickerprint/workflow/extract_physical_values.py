@@ -138,7 +138,7 @@ def process_fourier_file(fourier_path: Path, output: Path, plotting: bool=False,
             fitting_result['sigma_bar'], fitting_result['kappa_scale']
         )
         durbin_watson = sf.calculate_durbin_watson(
-            experimental_spectrum, mag_df['best_fit']
+            np.array(experimental_spectrum), np.array(mag_df['best_fit'])
         )
 
         fitting_result["granule_id"] = granule_id

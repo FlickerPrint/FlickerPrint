@@ -82,12 +82,23 @@ def check_default_Java_locations():
             os.environ["PATH"] = updated_path
     
     elif system == "Darwin":  # macOS
-        try:
-            java_home = subprocess.run(
-                ["/usr/libexec/java_home"], capture_output=True, text=True
-            ).stdout.strip()
-        except subprocess.CalledProcessError:
-            java_home = None
+        output = subprocess.run(
+            ["/usr/libexec/java_home"], capture_output=True, text=True
+        )
+        java_home = output.stdout.strip()
+        return_code = output.returncode
+        if return_code:
+            print("There")
+            try:
+                return_code = subprocess.run(
+                    ["/opt/homebrew/opt/openjdk/bin/java", "-version"], capture_output=True, text=True # Check to see whether Java is installed via Homebrew, have to do this manually as /usr/libexec/java_home does not work with Homebrew installations
+                ).returncode
+                if not return_code:
+                    java_home = "/opt/homebrew/opt/openjdk/"
+                else:
+                    java_home = None
+            except FileNotFoundError:
+                java_home = None
         if java_home:
             os.environ["JAVA_HOME"] = java_home
             updated_path = os.path.join(java_home, "bin") + ":$PATH"
@@ -279,27 +290,29 @@ setup(name='flickerprint',
       maintainer='Thomas Williamson',
       description='FlickerPrint: Non-invasive measurement of biomolecular condensate mechanical properties from confocal microscopy images.',
       python_requires=">=3.9, <3.12",
-      install_requires=["numpy",
-                        "python-javabridge>=4.0.4",
-                        "python-bioformats>=4.1.0",
-                        "matplotlib",
-                        "scikit-image",
-                        "pandas",
-                        "seaborn",
-                        "h5py>=3.11.1",
-                        "tqdm",
-                        "argh",
-                        "wget",
-                        "strictyaml>=1.7.3",
-                        "tables>=3.9.1",
-                        "opencv-python>=4.10.0.84",
-                        "exifread>=3.0.0",
-                        "tensorflow>=2.16.2",
-                        "shiny==1.2.1",
-                        "trieste",
-                        "shinyswatch",
-                        "jinja2",
-                        "cmake"],
+      install_requires=[
+        "numpy>=1.26.4",
+        "python-javabridge==4.0.4",
+        "python-bioformats==4.1.0",
+        "matplotlib>=3.9.2",
+        "scikit-image>=0.24.0",
+        "pandas>=2.2.2",
+        "seaborn>=0.13.2",
+        "h5py==3.13.0",
+        "tqdm==4.66.5",
+        "argh==0.31.3",
+        "wget==3.2",
+        "strictyaml==1.7.3",
+        "tables>=3.10.1",
+        "opencv-python==4.10.0.84",
+        "exifread==3.0.0",
+        "tensorflow>=2.16.2",
+        "shiny==1.2.1",
+        "trieste==4.3.0",
+        "shinyswatch==0.8.0",
+        "jinja2==3.1.4",
+        "cmake==4.0.0"
+    ],
       entry_points={
         'console_scripts': ['flickerprint=flickerprint.workflow.manager:main'
         ]},

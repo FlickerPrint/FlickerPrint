@@ -324,7 +324,7 @@ def calculate_durbin_watson(
     experimental_spectrum: np.ndarray, best_fit_spectrum: np.ndarray
 ):
     residuals = np.log10(experimental_spectrum / best_fit_spectrum)
-    durbin_watson_stat = np.sum(np.square(residuals[1:] - residuals[:1])) / np.sum(
+    durbin_watson_stat = np.sum(np.square(residuals[1:] - residuals[:-1])) / np.sum(
         np.square(residuals)
     )
     return durbin_watson_stat

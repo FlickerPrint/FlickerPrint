@@ -173,7 +173,7 @@ def filter_dataset(input: Inputs, granule_data_df: pd.DataFrame) -> pd.DataFrame
     # Check to see whether the resolution threshold filter is selected:
     if input['above_res_threshold']():
         try:
-            granule_data_df = granule_data_df[granule_data_df["above_resolution_threshold"] == True]
+            granule_data_df = granule_data_df[granule_data_df["above_res_threshold"] == True]
         except KeyError:
             # If the column does not exist (e.g. from older datasets), we skip this filter
             pass

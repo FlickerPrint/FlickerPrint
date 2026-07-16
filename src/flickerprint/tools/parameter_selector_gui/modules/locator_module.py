@@ -337,6 +337,19 @@ def locator_module_server(input: Inputs, output: Outputs, session: render, micro
         
         image_path = files[selected_image_name]
         try:
+            opener = next(fg.gen_opener(image_path, _pixel_size=pixel_size))
+            max_frames = opener.total_frames
+            if frame_number >= max_frames:
+                m = ui.modal(
+                    ui.p(f"The selected frame number ({frame_number + 1}) exceeds the total number of frames ({max_frames}) in the image."),
+                    ui.p("Please select a valid frame number."),
+                    title="Frame Number Error",
+                    easy_close=True,
+                    footer=None,
+                )
+                ui.modal_show(m)
+                frame_number = 0  # Reset to the first frame
+                ui.update_text("frame_number", value=str(frame_number + 1), session=session)
             image_frames = islice(fg.gen_opener(image_path, _pixel_size=pixel_size), frame_number, frame_number + 1)
             frame = next(image_frames)
         except Exception as e:
