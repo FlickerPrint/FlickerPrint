@@ -22,6 +22,7 @@ This flicker spectroscopy analysis can be parallised across multiple cores to al
     :maxdepth: 2
     
     find_out_more/find_out_more
+    find_out_more/citing_flickerprint
 
 
 

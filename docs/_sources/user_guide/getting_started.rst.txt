@@ -4,6 +4,9 @@
 Getting started
 ===============
 
+This page contains information on how to get started with FlickerPrint, including creating an experiment, configuring the analysis, running the analysis, and viewing the results.
+More detailed information is available in the :ref:`workflow` section of the documentation.
+
 Creating an experiment
 ++++++++++++++++++++++
 
@@ -18,44 +21,57 @@ Running
   flickerprint create-project EXPERIMENT_NAME
 
 will create an experiment directory ``EXPERIMENT_NAME`` on disk relative to the current location.
-You can then set up set up your experiment by filling out the :ref:`configuration_values` as appropriate.
 
-Configuration File
-++++++++++++++++++
+Configuring the Analysis
+++++++++++++++++++++++++
 
-The configuration file is where settings for the experiment can be configured.
-
-
-Most of the default values within the configuration file are sensible defaults. However, the following values should be changed:
-
-
-``image_directory``
-  Directory containing the image files (or the path to a single image file).
-  Leaving this as ``default_images`` specifies the ``images`` folder of the experiment sub-directory.
-
-``image_regex``
-  `Glob pattern <http://man7.org/linux/man-pages/man7/glob.7.html>`_ for images to include. We currently accept ``.ims``, ``.lif``, ``.ome.tif[f]`` and ``.tif[f]``. With ``.tif[f]`` files, the pixel size must be read from the config file, while in other file types it can be automatically extracted from the metadata.
-
-``experiment_name``
-  Human readable name for the experiments, used in organisation and plotting. Experiments with the same name will be combined by the plotting routines.
-
-There are some values in the configuration file which relate to imaging and may need to be adjusted, particularly when analysing images from a new setup.
-FlickerPrint includes a Bayesian inference tool to determine the optimal values for these parameters.
-It can be called using
+FlickerPrint analysis is configured using a configuration file, ``config.yaml``, which is created in the experiment directory when you create the project.
+The easiest way to configure the analysis is by using the parameter selection tool which runs locally on your computer and opens in a brower window. 
+The parameter selection tool can be started using the command
 
 .. code-block:: bash
 
-  flickerprint parameter-estimation
+  flickerprint parameter-selection
 
-See :ref:`configuration_values` for more information about the rest of the parameters in the configuration file.
+which will open it in your default web browser.
+
+Open videos in the parameter selection tool by clicking the ``Open Microscope Video`` button and selecting the videos you want to analyse, or dragging and dropping them onto the ``Open Microscope Video`` button.
+You can open multiple videos at once.
+
+Note that if your video does not contain pixel size information, you will need to enter the pixel size in the parameter selection tool.
+
+Use the sliders to adjust the parameters for the analysis, to maximise the number of condensates which are detected.
+It is advised that you check the parameters against multiple frames in different videos to ensure that the parameters are robust and not overfitted to a single frame.
+The detection method should be set to ``gradient`` for condensates and ``intensity`` for vesicles.
+
+You should also configure the ``Additional Parameters`` needed for the analysis:
+
+``Image Path``
+  The path to the image files (or the path to a single image file). Leaving this as ``default_images`` specifies the ``images`` folder of the experiment sub-directory.
+
+``Image Regular Expression``
+  `Glob pattern <http://man7.org/linux/man-pages/man7/glob.7.html>`_ for images to include. FlickerPrint version 1.0 and newer support `Bioformat-compliant microscopy <https://doi.org/10.1083/jcb.201004104>`_ file formats.
+
+``Experiment Name``
+  Human readable name for the experiments, used in organisation and plotting. Experiments with the same name will be combined by the plotting routines.
+
+``Experiment Temperature``
+  The temperature at which the experiment was performed, in degrees Celsius.
+
+``Plot Detector Images``
+  Whether to plot the images of the detected condensates and their boundaries.
+
+``Plot Fluctuation Spectra``
+  Whether to plot the fluctuation spectra for each condensate.
+
+Once you are happy with the parameters, set a save location for the configuration file (save to the ``experiment directory`` directly or save to yuor downloads folder and move the file manually), and click ``Save Parameters``.
+
+
+See :ref:`configuration_values` for more information about additional advanced parameters in the configuration file.
 
 Running FlickerPrint
 ++++++++++++++++++++
 
-.. _automatic_workflow:
-
-Automatic workflow
-------------------
 
 FlickerPrint's manager handles running the full analysis through the command line, though you can also run parts of the analysis separately or use individual functions from the package if you wish.
 The manager is made available to you when you install FlickerPrint.
@@ -69,30 +85,6 @@ To use FlickerPrint on the experiment directory you just created, move your term
 This will analyse all images in the directory you have specified in the config file.
 You can optionally add the ``-c CORES`` flag to specify the maximum number of cores that should be used (this is 1 by default).
 
-Manual workflow
----------------
-
-The main workflow of FlickerPrint is split into two main steps: image processing and fluctuation spectrum fitting.
-
-It may not always be preferable to use FlickerPrint's automatic workflow, particularly if you are running analysis in a High Performance Computing (HPC) environment or there are large numbers of condensates in each microscope image.
-In these cases, it may make sense to process the micrscope images and fit the fluctuation spectra separately, so that different resources can be allocated to each task.
-
-The two steps are completed using two commands:
-
-.. code-block:: bash
-
-  flickerprint process-image [-i INPUT_IMAGE] [-o OUTPUT_DIR] [-c CORES]
-
-which processes the microscope image(s), at the path ``INPUT_IMAGE`` if it is provided, or those specified in the config file otherwise. The location of each granlue is determined in every frame and its boundary is found.
-Next, the fluctuation spectrum must be generated for each granule, allowing the surface tension :math:`\sigma` and the bending rigidity :math:`\kappa` to be determined. To do this, run
-
-.. code-block:: bash
-
-  flickerprint spectrum-fitting WORKING_DIR [-c CORES]
-
-If the working directory is the same as the current directory, ``WORKING_DIR`` can be input as ``.``.
-Full details of these steps can be found in the :ref:`workflow` section of the documentation.
-
 Analysing results
 +++++++++++++++++
 
@@ -100,20 +92,16 @@ The results from FlickerPrint are stored in the ``aggregate_fittings.h5`` file i
 All values are standard c-types so you can use your favourite software to filter and analyse the results.
 For more information, see :ref:`aggregate_fittings.h5`.
 
-FlickerPrint also contains a Graphical User Interface and associated command-line tools for looking at the output of the analysis.
+FlickerPrint also contains a Graphical User Interface tool for looking at the output of the analysis.
 These can be called using
 
 .. code-block:: bash
 
   flickerprint view-output
 
-and
+which will open the GUI in your default web browser.
 
-.. code-block:: bash
 
-  flickerprint view-output-terminal
-
-respectively.
 
 
 Version number

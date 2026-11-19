@@ -157,6 +157,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -273,6 +280,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -347,9 +361,9 @@
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out more</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out More</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../find_out_more/papers.html">FlickerPrint Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../find_out_more/citing_flickerprint.html">Citing FlickerPrint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../find_out_more/contributors.html">Contributors</a></li>
 
 </ul>
@@ -411,7 +425,7 @@
 <span id="id1"></span><h1>Workflow<a class="headerlink" href="#workflow" title="Link to this heading">#</a></h1>
 <p>This page covers the setps of the analysis in more detail, including details of the workflow and the files created.
 The automatic workflow can be called using</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CORES<span class="o">]</span>
+<div class="highlight-bash notranslate" id="automatic-workflow"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CORES<span class="o">]</span>
 </pre></div>
 </div>
 <p>and is the easiest way to use FlickerPrint.
@@ -445,8 +459,15 @@ For details on the contents of thw experiment directory, please see <a class="re
 <h2>Setting Parameters in the Config File<a class="headerlink" href="#setting-parameters-in-the-config-file" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="configuration.html#configuration-values"><span class="std std-ref">configuration file</span></a> stores all of the settings for a particular experiment.</p>
 <p>The imaging parameters are also partiuclarly important as they control which condensates are detected (though generally, they do not affect the determined boundary; see the <a class="reference external" href="https://doi.org/10.1101/2025.03.24.645013">FlickerPrint release paper</a> for details).</p>
-<p>For consistency reasons, similar experiments should use the same imaging parameters.
-However for new experiments, FlickerPrint contains a Bayesian Inference tool to automatically determine the best imaging parameters to use by maximising the number of condensates found, whilst minimising the number that will fail the condensate filters.
+<p>For consistency reasons, similar experiments should use the same imaging parameters.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file can be edited directly, though <strong>the easiest way to modify the imaging parameters is to use the parameter selection tool</strong> which can be called using</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>parameter-selection
+</pre></div>
+</div>
+<p>which runs the tool locally on your computer and opens it in a web browser.
+This allows you to open microscope videos, adjust the imaging parameters and see live feedback on which condensates are detected. The imaging parameters can then be saved to the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file.</p>
+<p>FlickerPrint also contains an optional Bayesian Inference tool to automatically determine the best imaging parameters to use by maximising the number of condensates found, whilst minimising the number that will fail the condensate filters.
+Often, it is easiest to use the graphical parameter selection tool, though the Bayesian inference tool can be useful if analysing very large numbers of videos.
 This can be called using</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>parameter-optimisation
 </pre></div>
@@ -458,7 +479,7 @@ The parameters are written into the config file and the old parameters in the co
 <span id="id2"></span><h2>Image Processing<a class="headerlink" href="#image-processing" title="Link to this heading">#</a></h2>
 <p>The first step of the main analysis is to locate the objects of interest within each frame and determine their bounaries.
 A Fourier transform is then used to extract the fluctuation modes of the boundaries.
-This is the first stage of the <a class="reference internal" href="../user_guide/getting_started.html#automatic-workflow"><span class="std std-ref">Automatic workflow</span></a>; FlickerPrint will check the <a class="reference internal" href="configuration.html#configuration-values"><span class="std std-ref">configuration file</span></a> and run the analysis on all microscope images in the specified <code class="docutils literal notranslate"><span class="pre">image_directory</span></code> which match the <code class="docutils literal notranslate"><span class="pre">image_regex</span></code>.</p>
+This is the first stage of the <span class="xref std std-ref">automatic_workflow</span>; FlickerPrint will check the <a class="reference internal" href="configuration.html#configuration-values"><span class="std std-ref">configuration file</span></a> and run the analysis on all microscope images in the specified <code class="docutils literal notranslate"><span class="pre">image_directory</span></code> which match the <code class="docutils literal notranslate"><span class="pre">image_regex</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">image_directory</span></code> can either be a single microscope image or a directory of images.</p>
@@ -515,7 +536,7 @@ A full derivation of this model can be found in the Supplementary Material of <a
 <div class="math notranslate nohighlight">
 \[\varepsilon_{log}=\sum_q\left|\log _{10}\left[\frac{\left|F_{q, \text { theo}}\right|^2}{\left|F_{q, \text { exp}}\right|^2}\right]\right|\]</div>
 <p>to ensure that the fit of each Fourier mode is equally weighted even when their amplitudes vary by several orders of magnitude.</p>
-<p>As with the image processing step, this can be run as part of the <a class="reference internal" href="../user_guide/getting_started.html#automatic-workflow"><span class="std std-ref">automated workflow</span></a>.
+<p>As with the image processing step, this can be run as part of the <a class="reference internal" href="#automatic-workflow"><span class="std std-ref">automated workflow</span></a>.
 However, it can also be called manaually using</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>spectrum-fitting<span class="w"> </span>WORKING_DIR<span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CORES<span class="o">]</span>
 </pre></div>

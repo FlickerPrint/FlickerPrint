@@ -6,7 +6,7 @@ Image Requirements
 FlickerPrint requires the use of confocal microscopy images as input in order to conduct the flicker spectroscopy analysis.
 Details of experiments which are suited to this analysis are given in the `software paper <https://doi.org/10.1101/2025.03.24.645013>`_.
 
-Images in :ref:`these <papers>` works were taken using an Andor dragonfly spinning disk, we used a 100x 1.49NA lens with a 1.5x magnification, or when this was out of service a 60x with a 2x magnification. In another system, we would prefer the highest resolution possible, although consider the trade-off with the NA of the lens if the 60x is better.
+Images in :ref:`these <citing_flickerprint>` works were taken using an Andor dragonfly spinning disk, we used a 100x 1.49NA lens with a 1.5x magnification, or when this was out of service a 60x with a 2x magnification. In another system, we would prefer the highest resolution possible, although consider the trade-off with the NA of the lens if the 60x is better.
 
 Our primary goals in the imaging are to get the highest resolution images and reduce the exposure time of the microscope; the higher order terms of the perturbations fluctuate rapidly, this creates blurring in the interface that we want to minimize. On our Andor spinning disk we can get this down to 5 or 10 ms, this of course requires an increase in the laser power (some care should be taken with HyD sensors on Leica microscopes, they can be damaged by high laser intensities). This causes bleaching of the droplets so only perform this burst once per droplet.
 

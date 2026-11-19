@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'source_code/plot_tools';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="FlickerPrint Papers" href="../find_out_more/papers.html" />
+    <link rel="next" title="Citing FlickerPrint" href="../find_out_more/citing_flickerprint.html" />
     <link rel="prev" title="Statistics" href="statistics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -153,6 +153,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../find_out_more/find_out_more.html">
     Find Out More
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
   </a>
 </li>
 
@@ -272,6 +279,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -346,9 +360,9 @@
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out more</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out More</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../find_out_more/papers.html">FlickerPrint Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../find_out_more/citing_flickerprint.html">Citing FlickerPrint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../find_out_more/contributors.html">Contributors</a></li>
 
 </ul>
@@ -411,6 +425,12 @@
                   
   <section id="module-flickerprint.tools.plot_tools">
 <span id="id1"></span><span id="plot-tools"></span><h1>Plot Tools<a class="headerlink" href="#module-flickerprint.tools.plot_tools" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="flickerprint.tools.plot_tools.add_scalebar">
+<span class="sig-prename descclassname"><span class="pre">flickerprint.tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">add_scalebar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length_absolute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_bar_inside</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.tools.plot_tools.add_scalebar" title="Link to this definition">#</a></dt>
+<dd><p>Add a scale bar to the current axis.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="flickerprint.tools.plot_tools.annotate_axis">
 <span class="sig-prename descclassname"><span class="pre">flickerprint.tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">annotate_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fontKwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.tools.plot_tools.annotate_axis" title="Link to this definition">#</a></dt>
@@ -496,13 +516,13 @@ TODO: Add colour-bar and equalisation options.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="flickerprint.tools.plot_tools.save">
-<span class="sig-prename descclassname"><span class="pre">flickerprint.tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tl_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">despine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">330</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.tools.plot_tools.save" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">flickerprint.tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tl_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">despine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.tools.plot_tools.save" title="Link to this definition">#</a></dt>
 <dd><p>Save the figure with metadata and crop the boundaries.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="flickerprint.tools.plot_tools.save_figure_and_trim">
-<span class="sig-prename descclassname"><span class="pre">flickerprint.tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">save_figure_and_trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tl_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">despine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">330</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.tools.plot_tools.save_figure_and_trim" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">flickerprint.tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">save_figure_and_trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tl_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">despine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.tools.plot_tools.save_figure_and_trim" title="Link to this definition">#</a></dt>
 <dd><p>Save the figure with metadata and crop the boundaries.</p>
 </dd></dl>
 
@@ -536,11 +556,11 @@ axes and add x-labels to the bottom row.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../find_out_more/papers.html"
+       href="../find_out_more/citing_flickerprint.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">FlickerPrint Papers</p>
+        <p class="prev-next-title">Citing FlickerPrint</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -563,6 +583,7 @@ axes and add x-labels to the bottom row.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.tools.plot_tools.add_scalebar"><code class="docutils literal notranslate"><span class="pre">add_scalebar()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.tools.plot_tools.annotate_axis"><code class="docutils literal notranslate"><span class="pre">annotate_axis()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.tools.plot_tools.create_axes"><code class="docutils literal notranslate"><span class="pre">create_axes()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.tools.plot_tools.create_figure_directory"><code class="docutils literal notranslate"><span class="pre">create_figure_directory()</span></code></a></li>

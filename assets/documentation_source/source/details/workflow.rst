@@ -7,6 +7,7 @@ Workflow
 This page covers the setps of the analysis in more detail, including details of the workflow and the files created.
 The automatic workflow can be called using 
 
+.. _automatic_workflow:
 .. code-block:: bash
 
   flickerprint run [-c CORES]
@@ -51,12 +52,24 @@ Setting Parameters in the Config File
 
 The :ref:`configuration file<configuration_values>` stores all of the settings for a particular experiment.
 
-
-
 The imaging parameters are also partiuclarly important as they control which condensates are detected (though generally, they do not affect the determined boundary; see the `FlickerPrint release paper <https://doi.org/10.1101/2025.03.24.645013>`_ for details).
 
 For consistency reasons, similar experiments should use the same imaging parameters.
-However for new experiments, FlickerPrint contains a Bayesian Inference tool to automatically determine the best imaging parameters to use by maximising the number of condensates found, whilst minimising the number that will fail the condensate filters.
+
+The ``config.yaml`` file can be edited directly, though **the easiest way to modify the imaging parameters is to use the parameter selection tool** which can be called using
+
+.. code-block:: bash
+
+  flickerprint parameter-selection
+
+which runs the tool locally on your computer and opens it in a web browser.
+This allows you to open microscope videos, adjust the imaging parameters and see live feedback on which condensates are detected. The imaging parameters can then be saved to the ``config.yaml`` file.
+
+
+
+
+FlickerPrint also contains an optional Bayesian Inference tool to automatically determine the best imaging parameters to use by maximising the number of condensates found, whilst minimising the number that will fail the condensate filters.
+Often, it is easiest to use the graphical parameter selection tool, though the Bayesian inference tool can be useful if analysing very large numbers of videos.
 This can be called using
 
 .. code-block:: bash

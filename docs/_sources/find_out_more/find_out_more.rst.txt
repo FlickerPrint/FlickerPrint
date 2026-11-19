@@ -34,8 +34,8 @@ Find out more about the theory and technical details of FlickerPrint.
     ../source_code/module_source_code
 
 .. toctree::
-    :caption: Find Out more
+    :caption: Find Out More
     :maxdepth: 1
 
-    ../find_out_more/papers
+    ../find_out_more/citing_flickerprint
     ../find_out_more/contributors

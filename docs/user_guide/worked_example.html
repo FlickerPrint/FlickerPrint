@@ -157,6 +157,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -273,6 +280,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -347,9 +361,9 @@
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out more</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out More</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../find_out_more/papers.html">FlickerPrint Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../find_out_more/citing_flickerprint.html">Citing FlickerPrint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../find_out_more/contributors.html">Contributors</a></li>
 
 </ul>
@@ -431,24 +445,34 @@ Using the terminal (or command prompt in Windows), navigate to where you would l
 </pre></div>
 </div>
 <p>which will create an experiment directory called <code class="docutils literal notranslate"><span class="pre">example_project</span></code>.
-Use <code class="docutils literal notranslate"><span class="pre">cd</span></code> to move into this directory.</p>
-<p>Open <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, the configuration file in your text editor of choice as there are a couple of settings that will need to be changed:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">image_directory</span></code> - This is the location of the microscpe images. You can either leave this as it’s default value and copy the microscpe image linked above into the <code class="docutils literal notranslate"><span class="pre">images</span></code> folder in the experiment directory or modify the value of this parameter so that it points towards the downloaded copy of the image on your computer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">experiment_name</span></code> - This is a human-readable name for the experiment, used to differentiate between multiple experiments on the same plot. You can set this to anything you like.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">granule_images</span></code> - This produces debugging plots to show the location of detected granules and their boundaries and stores them in the <code class="docutils literal notranslate"><span class="pre">tracking</span></code> directory.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plot_spectra_and_heatmaps</span></code> - This produces debugging plots to show the fluctuation spectrum for each condensate — we will look at these later.</p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In this case, the other default values in the configuration file should be correct.
-However, in other cases, you may need to adjust the imaging parameters to find all of the condensates in your image.
-This can be done manually or by running</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>parameter-estimation
+Use <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">example_project</span></code> to move into this directory.</p>
+<p>Run the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>parameter-selection
 </pre></div>
 </div>
-<p>For the best results, run parameter estimation on a directory of multiple microscope files.</p>
+<p>to open the parameter selection tool in your default web browser, as shown in Figure 1.</p>
+<figure class="align-default" id="id3">
+<img alt="The parameter selection tool." src="../_images/parameter_selection_tool.png" />
+<figcaption>
+<p><span class="caption-text">Figure 1: The parameter selection tool, which can be used to adjust the parameters for the analysis.</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Open the microscope image linked above in the parameter selection tool by clicking the <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Microscope</span> <span class="pre">Video</span></code> button and selecting the file you downloaded, or dragging and dropping it onto the <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Microscope</span> <span class="pre">Video</span></code> button.</p>
+<p>The first frame of the file will be displayed on the left and the detected granules will be shown on the right.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this case, the default values in the configuration file should be correct for finding the condensates in the image.
+However, in other cases, you may need to adjust the imaging parameters to find most of your condensates.
+Additional information can be found in the <a class="reference internal" href="getting_started.html#getting-started"><span class="std std-ref">Getting started</span></a> section.</p>
 </div>
+<p>You will still need to change the following parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Image</span> <span class="pre">Path</span></code> - The path to the image files (or the path to a single image file). Leaving this as <code class="docutils literal notranslate"><span class="pre">default_images</span></code> specifies the <code class="docutils literal notranslate"><span class="pre">images</span></code> folder of the experiment sub-directory.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Experiment</span> <span class="pre">Name</span></code> - Human readable name for the experiments, used in organisation and plotting. Experiments with the same name will be combined by the plotting routines.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Detector</span> <span class="pre">Images</span></code> - Whether to plot the images of the detected condensates and their boundaries.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Fluctuation</span> <span class="pre">Spectra</span></code> - Whether to plot the fluctuation spectra for each condensate.</p></li>
+</ul>
+<p>Once you are happy with the parameters, set a save location for the configuration file (save to the <code class="docutils literal notranslate"><span class="pre">experiment</span> <span class="pre">directory</span></code> directly or save to yuor downloads folder and move the file manually), and click <code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">Parameters</span></code>.</p>
 </section>
 <section id="running-flickerprint">
 <h2>Running FlickerPrint<a class="headerlink" href="#running-flickerprint" title="Link to this heading">#</a></h2>
@@ -463,18 +487,18 @@ In the first, we locate the condensates in the image, track them through the fra
 The detection folder contains an output for every 100 <sup>th</sup> frame.
 The left plot shows the location of the detected granules and the right plot shows the raw frame from the microscope file.
 These plots are intended to be used to ensure that granules have been located correctly.
-An example of one of these images can be seen in Figure 1.</p>
-<figure class="align-default" id="id3">
+An example of one of these images can be seen in Figure 2.</p>
+<figure class="align-default" id="id4">
 <img alt="" src="../_images/granule_detection.png" />
 <figcaption>
-<p><span class="caption-text">Figure 1: An example image from the <em>tracking</em> directory. The left plot shows the locations of the granules and their approximate extent, as detected by the granule detection algorithm. The right plot shows the original frame from the microscope file.</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+<p><span class="caption-text">Figure 2: An example image from the <em>tracking</em> directory. The left plot shows the original frame from the microscope file; the right plot shows the locations of the granules and their approximate extent, as detected by the granule detection algorithm.</span><a class="headerlink" href="#id4" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>In the outline directory, an image of each granule for every 100 <sup>th</sup> frame and its boundary is produced. If the boundary is white, then the granule has been accepted for further analaysis; if it is red, then the granule has been rejected for this frame.</p>
-<figure class="align-default" id="id4">
-<img alt="Figure 2: The images of two granules, together with their outlines, as determined by the boundary detection algorithm. a) shows an accepted granule (as shown by the complete, white outline) and b) shows a rejected granule (as shown by the incomplete, red outline). In this case, the granule depicted in b) is likely two granules that are in the process of merging. The blue dot shows the centre of the granule, as determined by the boundary detection algorithm." src="../_images/granules_outline.png" />
+<figure class="align-default" id="id5">
+<img alt="Figure 3: The images of two granules, together with their outlines, as determined by the boundary detection algorithm. a) shows an accepted granule (as shown by the complete, white outline) and b) shows a rejected granule (as shown by the incomplete, red outline). In this case, the granule depicted in b) is likely two granules that are in the process of merging. The blue dot shows the centre of the granule, as determined by the boundary detection algorithm." src="../_images/granules_outline.png" />
 <figcaption>
-<p><span class="caption-text">Figure 2: The images of two granules, together with their outlines, as determined by the boundary detection algorithm. a) shows an accepted granule (as shown by the complete, white outline) and b) shows a rejected granule (as shown by the incomplete, red outline). In this case, the granule depicted in b) is likely two granules that are in the process of merging. The blue dot shows the centre of the granule, as determined by the boundary detection algorithm.</span><a class="headerlink" href="#id4" title="Link to this image">#</a></p>
+<p><span class="caption-text">Figure 3: The images of two granules, together with their outlines, as determined by the boundary detection algorithm. a) shows an accepted granule (as shown by the complete, white outline) and b) shows a rejected granule (as shown by the incomplete, red outline). In this case, the granule depicted in b) is likely two granules that are in the process of merging. The blue dot shows the centre of the granule, as determined by the boundary detection algorithm.</span><a class="headerlink" href="#id5" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Also output at this stage of the analysis is <em>&lt;imagename&gt;.h5</em>, found in the <em>fourier</em> sub-directory, where <em>&lt;imagename&gt;</em> is the name of the original microscope image file. This contains the numerical data from the first stage in the analysis, including the location of each granule and its fourier components. For more information on the contents of this file, please see the <a class="reference internal" href="../details/data_storage.html#fourier-h5"><span class="std std-ref">fourier.h5</span></a> section.</p>
@@ -490,16 +514,16 @@ Full details and a derivation of this spectrum can be found <a class="reference 
 <p>Plots showing the fluctuation spectrum and series of heatmaps showing the quality of fit of the theoretical spectrum to the experimental data are produced for each granule. These can be found in the <em>fitting/spectra</em> and <em>fitting/heatmaps</em> sub-directories respectively.</p>
 <p>The spectra show the magnitude of the fluctuations as blue circles with the best-fit theoretical spectrum shown in black. Also shown are the magnitudes of the total purturbations (including any constant terms due to the time-averaged base shape) of the Fourier modes, plotted as red tri-points.</p>
 <p>The heatmaps show the <span class="math notranslate nohighlight">\(\kappa - \bar{\sigma}\)</span> paramterspace, around its minimum. The first plot in the image shows the heatmap with the defualt colour scaling; the second uses a logarithmic scaling to highlight the minumum more easily. Also shown in the second plot are the best fit value (plotted as a black circle) and the actual minimum of the paramter space (plotted as a red circle). The final plot in each image is a copy of the spectrum for that granule.</p>
-<figure class="align-default" id="id5">
+<figure class="align-default" id="id6">
 <img alt="Example fluctuation spectra." src="../_images/fluctuation_spectra.png" />
 <figcaption>
-<p><span class="caption-text">Figure 3: The fluctuation spectra produced for two different granules. The interfacial tension <span class="math notranslate nohighlight">\(\sigma\)</span> and the bending rigidity <span class="math notranslate nohighlight">\(\kappa\)</span> and their respective uncertainties are displayed at the top of each plot.</span><a class="headerlink" href="#id5" title="Link to this image">#</a></p>
+<p><span class="caption-text">Figure 4: The fluctuation spectra produced for two different granules. The interfacial tension <span class="math notranslate nohighlight">\(\sigma\)</span> and the bending rigidity <span class="math notranslate nohighlight">\(\kappa\)</span> and their respective uncertainties are displayed at the top of each plot.</span><a class="headerlink" href="#id6" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id6">
+<figure class="align-default" id="id7">
 <img alt="Example heatmpas for two granules." src="../_images/heatmaps.png" />
 <figcaption>
-<p><span class="caption-text">Figure 4: Heatmaps from the spectrum fitting of two granules. Sub-figures a-c represent the fitting shown in figure 3a and sub-figures d-f represent the fitting shown in figure 3b. Sub-figures 4a and 4d show the <span class="math notranslate nohighlight">\(\kappa - \sigma\)</span> parameterspace, using the default colour scaling. Sub-figures 4b and 4e show the parameterspace with a logarithmic colour scaling. Sub-figures 4c and 4f show a basic plot of the fluctuation spectra, as is done in more detail in the spectrum plots shown in figure 3.</span><a class="headerlink" href="#id6" title="Link to this image">#</a></p>
+<p><span class="caption-text">Figure 5: Heatmaps from the spectrum fitting of two granules. Sub-figures a-c represent the fitting shown in figure 4a and sub-figures d-f represent the fitting shown in figure 4b. Sub-figures 5a and 5d show the <span class="math notranslate nohighlight">\(\kappa - \sigma\)</span> parameterspace, using the default colour scaling. Sub-figures 5b and 5e show the parameterspace with a logarithmic colour scaling. Sub-figures 5c and 5f show a basic plot of the fluctuation spectra, as is done in more detail in the spectrum plots shown in figure 4.</span><a class="headerlink" href="#id7" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Also output at this stage in the analysis is the file <em>aggregate_fittings.h5</em> which contains the properties of each granule and its fitting information.
@@ -516,6 +540,12 @@ For more information, please see the <a class="reference internal" href="../deta
 </pre></div>
 </div>
 <p>and will open in a web browser window.</p>
+<figure class="align-default" id="id8">
+<img alt="The visualisation tool." src="../_images/visualisation_tool.png" />
+<figcaption>
+<p><span class="caption-text">Figure 6: The visualisation tool, which can be used to explore the results of the analysis.</span><a class="headerlink" href="#id8" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 

@@ -29,28 +29,28 @@ System-Specific Prerequisites
 
          xcode-select --install
 
-      .. Note::
+      .. .. Note
 
-         If you are using an Apple Silicon Mac (likely any Mac made after 2020), you may also need to manually install the h5py python library using a compatable version of HDF5.
-         At the time of writing, the version of HDF5 which ships with h5py does not support Apple Silicon.
-         This module is used to read and write the data files produced during the analysis.
+      ..    If you are using an Apple Silicon Mac (likely any Mac made after 2020), you may also need to manually install the h5py python library using a compatable version of HDF5.
+      ..    At the time of writing, the version of HDF5 which ships with h5py does not support Apple Silicon.
+      ..    This module is used to read and write the data files produced during the analysis.
 
-         To do so, first install `homebrew <https://brew.sh>`_ if you do not have it already:
+      ..    To do so, first install `homebrew <https://brew.sh>`_ if you do not have it already:
 
-         .. code-block:: zsh
+      ..    .. code-block:: zsh
 
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            echo >> /Users/dev/.zprofile
-            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/dev/.zprofile
-            eval "$(/opt/homebrew/bin/brew shellenv)"
+      ..       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      ..       echo >> /Users/dev/.zprofile
+      ..       echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/dev/.zprofile
+      ..       eval "$(/opt/homebrew/bin/brew shellenv)"
 
-         Then use it to install HDF5 and h5py:
+      ..    Then use it to install HDF5 and h5py:
 
-         .. code-block:: zsh
+      ..    .. code-block:: zsh
 
-            brew install hdf5
-            export HDF5_DIR="$(brew --prefix hdf5)"
-            python3 -m pip install --no-binary=h5py h5py
+      ..       brew install hdf5
+      ..       export HDF5_DIR="$(brew --prefix hdf5)"
+      ..       python3 -m pip install --no-binary=h5py h5py
 
    .. tab-item:: Linux
 
@@ -59,7 +59,39 @@ System-Specific Prerequisites
 Installation via pip
 +++++++++++++++++++++
 
-To install FlickerPrint, download the source code from `GitHub <https://github.com/FlickerPrint/FlickerPrint>`_.
+FlickerPrint can be installed directly using pip:
+
+.. tab-set::
+
+   .. tab-item:: Windows
+
+      .. code-block:: bash
+
+         python -m pip install flickerprint
+
+   
+   .. tab-item:: macOS
+
+      .. code-block:: zsh
+
+         python3 -m pip install flickerprint
+   
+   .. tab-item:: Linux
+
+      .. code-block:: bash
+
+         python3 -m pip install flickerprint
+
+
+.. Note::
+
+   The ``JAVA_HOME`` and ``PATH`` environment variables must be set correctly so that the Java installation can be found by the Python modules that require it.
+   FlickerPrint will attempt to set these automatically on installation, though you can also set them manually using the instructions below.
+
+Building from Source
+++++++++++++++++++++
+
+To install FlickerPrint from source, download the source code from `GitHub <https://github.com/FlickerPrint/FlickerPrint>`_.
 Open the terminal and navigate to the ``FlickerPrint/src`` directory.
 Then install it using pip:
 
@@ -84,21 +116,12 @@ Then install it using pip:
 
          python3 -m pip install .
 
-
-Please note that FlickerPrint is not yet available on the Python Package Index (PyPI).
-This will be available shortly.
-
-
-.. Note::
-
-   The ``JAVA_HOME`` and ``PATH`` environment variables must be set correctly so that the Java installation can be found by the Python modules that require it.
-   FlickerPrint will attempt to set these automatically on installation, though you can also set them manually using the instructions below.
-
-
-
 Setting Environment Variables
 +++++++++++++++++++++++++++++
 
+As part of the installation process, FlickerPrint will attempt to set the ``JAVA_HOME`` and ``PATH`` environment variables automatically.
+If this fails, you may need to set them manually.
+Instructions are provided below for each operating system.
 
 .. tab-set::
 

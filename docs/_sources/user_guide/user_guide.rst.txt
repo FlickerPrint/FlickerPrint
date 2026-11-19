@@ -33,9 +33,9 @@ This section covers the basics; for more detailed information, see :ref:`details
     ../source_code/module_source_code
 
 .. toctree::
-    :caption: Find Out more
+    :caption: Find Out More
     :maxdepth: 1
     :hidden:
 
-    ../find_out_more/papers
+    ../find_out_more/citing_flickerprint
     ../find_out_more/contributors

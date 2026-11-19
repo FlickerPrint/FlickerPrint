@@ -46,7 +46,6 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/getting_started';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -154,6 +153,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../find_out_more/find_out_more.html">
     Find Out More
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
   </a>
 </li>
 
@@ -273,6 +279,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -347,9 +360,9 @@
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out more</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out More</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../find_out_more/papers.html">FlickerPrint Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../find_out_more/citing_flickerprint.html">Citing FlickerPrint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../find_out_more/contributors.html">Contributors</a></li>
 
 </ul>
@@ -409,6 +422,8 @@
                   
   <section id="getting-started">
 <span id="id1"></span><h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h1>
+<p>This page contains information on how to get started with FlickerPrint, including creating an experiment, configuring the analysis, running the analysis, and viewing the results.
+More detailed information is available in the <a class="reference internal" href="../details/workflow.html#workflow"><span class="std std-ref">Workflow</span></a> section of the documentation.</p>
 <section id="creating-an-experiment">
 <h2>Creating an experiment<a class="headerlink" href="#creating-an-experiment" title="Link to this heading">#</a></h2>
 <p>FlickerPrint runs all analysis from an <code class="docutils literal notranslate"><span class="pre">experiment</span> <span class="pre">directory</span></code>.
@@ -418,34 +433,43 @@ See <a class="reference internal" href="../details/directory_structure.html#dire
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>create-project<span class="w"> </span>EXPERIMENT_NAME
 </pre></div>
 </div>
-<p>will create an experiment directory <code class="docutils literal notranslate"><span class="pre">EXPERIMENT_NAME</span></code> on disk relative to the current location.
-You can then set up set up your experiment by filling out the <a class="reference internal" href="../details/configuration.html#configuration-values"><span class="std std-ref">Configuration File</span></a> as appropriate.</p>
+<p>will create an experiment directory <code class="docutils literal notranslate"><span class="pre">EXPERIMENT_NAME</span></code> on disk relative to the current location.</p>
 </section>
-<section id="configuration-file">
-<h2>Configuration File<a class="headerlink" href="#configuration-file" title="Link to this heading">#</a></h2>
-<p>The configuration file is where settings for the experiment can be configured.</p>
-<p>Most of the default values within the configuration file are sensible defaults. However, the following values should be changed:</p>
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">image_directory</span></code></dt><dd><p>Directory containing the image files (or the path to a single image file).
-Leaving this as <code class="docutils literal notranslate"><span class="pre">default_images</span></code> specifies the <code class="docutils literal notranslate"><span class="pre">images</span></code> folder of the experiment sub-directory.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">image_regex</span></code></dt><dd><p><a class="reference external" href="http://man7.org/linux/man-pages/man7/glob.7.html">Glob pattern</a> for images to include. We currently accept <code class="docutils literal notranslate"><span class="pre">.ims</span></code>, <code class="docutils literal notranslate"><span class="pre">.lif</span></code>, <code class="docutils literal notranslate"><span class="pre">.ome.tif[f]</span></code> and <code class="docutils literal notranslate"><span class="pre">.tif[f]</span></code>. With <code class="docutils literal notranslate"><span class="pre">.tif[f]</span></code> files, the pixel size must be read from the config file, while in other file types it can be automatically extracted from the metadata.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">experiment_name</span></code></dt><dd><p>Human readable name for the experiments, used in organisation and plotting. Experiments with the same name will be combined by the plotting routines.</p>
-</dd>
-</dl>
-<p>There are some values in the configuration file which relate to imaging and may need to be adjusted, particularly when analysing images from a new setup.
-FlickerPrint includes a Bayesian inference tool to determine the optimal values for these parameters.
-It can be called using</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>parameter-estimation
+<section id="configuring-the-analysis">
+<h2>Configuring the Analysis<a class="headerlink" href="#configuring-the-analysis" title="Link to this heading">#</a></h2>
+<p>FlickerPrint analysis is configured using a configuration file, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, which is created in the experiment directory when you create the project.
+The easiest way to configure the analysis is by using the parameter selection tool which runs locally on your computer and opens in a brower window.
+The parameter selection tool can be started using the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>parameter-selection
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="../details/configuration.html#configuration-values"><span class="std std-ref">Configuration File</span></a> for more information about the rest of the parameters in the configuration file.</p>
+<p>which will open it in your default web browser.</p>
+<p>Open videos in the parameter selection tool by clicking the <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Microscope</span> <span class="pre">Video</span></code> button and selecting the videos you want to analyse, or dragging and dropping them onto the <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Microscope</span> <span class="pre">Video</span></code> button.
+You can open multiple videos at once.</p>
+<p>Note that if your video does not contain pixel size information, you will need to enter the pixel size in the parameter selection tool.</p>
+<p>Use the sliders to adjust the parameters for the analysis, to maximise the number of condensates which are detected.
+It is advised that you check the parameters against multiple frames in different videos to ensure that the parameters are robust and not overfitted to a single frame.
+The detection method should be set to <code class="docutils literal notranslate"><span class="pre">gradient</span></code> for condensates and <code class="docutils literal notranslate"><span class="pre">intensity</span></code> for vesicles.</p>
+<p>You should also configure the <code class="docutils literal notranslate"><span class="pre">Additional</span> <span class="pre">Parameters</span></code> needed for the analysis:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Image</span> <span class="pre">Path</span></code></dt><dd><p>The path to the image files (or the path to a single image file). Leaving this as <code class="docutils literal notranslate"><span class="pre">default_images</span></code> specifies the <code class="docutils literal notranslate"><span class="pre">images</span></code> folder of the experiment sub-directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Image</span> <span class="pre">Regular</span> <span class="pre">Expression</span></code></dt><dd><p><a class="reference external" href="http://man7.org/linux/man-pages/man7/glob.7.html">Glob pattern</a> for images to include. FlickerPrint version 1.0 and newer support <a class="reference external" href="https://doi.org/10.1083/jcb.201004104">Bioformat-compliant microscopy</a> file formats.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Experiment</span> <span class="pre">Name</span></code></dt><dd><p>Human readable name for the experiments, used in organisation and plotting. Experiments with the same name will be combined by the plotting routines.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Experiment</span> <span class="pre">Temperature</span></code></dt><dd><p>The temperature at which the experiment was performed, in degrees Celsius.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Detector</span> <span class="pre">Images</span></code></dt><dd><p>Whether to plot the images of the detected condensates and their boundaries.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Fluctuation</span> <span class="pre">Spectra</span></code></dt><dd><p>Whether to plot the fluctuation spectra for each condensate.</p>
+</dd>
+</dl>
+<p>Once you are happy with the parameters, set a save location for the configuration file (save to the <code class="docutils literal notranslate"><span class="pre">experiment</span> <span class="pre">directory</span></code> directly or save to yuor downloads folder and move the file manually), and click <code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">Parameters</span></code>.</p>
+<p>See <a class="reference internal" href="../details/configuration.html#configuration-values"><span class="std std-ref">Configuration File</span></a> for more information about additional advanced parameters in the configuration file.</p>
 </section>
 <section id="running-flickerprint">
 <h2>Running FlickerPrint<a class="headerlink" href="#running-flickerprint" title="Link to this heading">#</a></h2>
-<section id="automatic-workflow">
-<span id="id2"></span><h3>Automatic workflow<a class="headerlink" href="#automatic-workflow" title="Link to this heading">#</a></h3>
 <p>FlickerPrint’s manager handles running the full analysis through the command line, though you can also run parts of the analysis separately or use individual functions from the package if you wish.
 The manager is made available to you when you install FlickerPrint.</p>
 <p>To use FlickerPrint on the experiment directory you just created, move your terminal into the directory and call</p>
@@ -455,39 +479,17 @@ The manager is made available to you when you install FlickerPrint.</p>
 <p>This will analyse all images in the directory you have specified in the config file.
 You can optionally add the <code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">CORES</span></code> flag to specify the maximum number of cores that should be used (this is 1 by default).</p>
 </section>
-<section id="manual-workflow">
-<h3>Manual workflow<a class="headerlink" href="#manual-workflow" title="Link to this heading">#</a></h3>
-<p>The main workflow of FlickerPrint is split into two main steps: image processing and fluctuation spectrum fitting.</p>
-<p>It may not always be preferable to use FlickerPrint’s automatic workflow, particularly if you are running analysis in a High Performance Computing (HPC) environment or there are large numbers of condensates in each microscope image.
-In these cases, it may make sense to process the micrscope images and fit the fluctuation spectra separately, so that different resources can be allocated to each task.</p>
-<p>The two steps are completed using two commands:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>process-image<span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>INPUT_IMAGE<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT_DIR<span class="o">]</span><span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CORES<span class="o">]</span>
-</pre></div>
-</div>
-<p>which processes the microscope image(s), at the path <code class="docutils literal notranslate"><span class="pre">INPUT_IMAGE</span></code> if it is provided, or those specified in the config file otherwise. The location of each granlue is determined in every frame and its boundary is found.
-Next, the fluctuation spectrum must be generated for each granule, allowing the surface tension <span class="math notranslate nohighlight">\(\sigma\)</span> and the bending rigidity <span class="math notranslate nohighlight">\(\kappa\)</span> to be determined. To do this, run</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>spectrum-fitting<span class="w"> </span>WORKING_DIR<span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CORES<span class="o">]</span>
-</pre></div>
-</div>
-<p>If the working directory is the same as the current directory, <code class="docutils literal notranslate"><span class="pre">WORKING_DIR</span></code> can be input as <code class="docutils literal notranslate"><span class="pre">.</span></code>.
-Full details of these steps can be found in the <a class="reference internal" href="../details/workflow.html#workflow"><span class="std std-ref">Workflow</span></a> section of the documentation.</p>
-</section>
-</section>
 <section id="analysing-results">
 <h2>Analysing results<a class="headerlink" href="#analysing-results" title="Link to this heading">#</a></h2>
 <p>The results from FlickerPrint are stored in the <code class="docutils literal notranslate"><span class="pre">aggregate_fittings.h5</span></code> file in the experiment directory.
 All values are standard c-types so you can use your favourite software to filter and analyse the results.
 For more information, see <a class="reference internal" href="../details/data_storage.html#aggregate-fittings-h5"><span class="std std-ref">aggregate_fittings.h5</span></a>.</p>
-<p>FlickerPrint also contains a Graphical User Interface and associated command-line tools for looking at the output of the analysis.
+<p>FlickerPrint also contains a Graphical User Interface tool for looking at the output of the analysis.
 These can be called using</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>view-output
 </pre></div>
 </div>
-<p>and</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flickerprint<span class="w"> </span>view-output-terminal
-</pre></div>
-</div>
-<p>respectively.</p>
+<p>which will open the GUI in your default web browser.</p>
 </section>
 <section id="version-number">
 <h2>Version number<a class="headerlink" href="#version-number" title="Link to this heading">#</a></h2>
@@ -546,12 +548,8 @@ These can be called using</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-an-experiment">Creating an experiment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-file">Configuration File</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-flickerprint">Running FlickerPrint</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-workflow">Automatic workflow</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-workflow">Manual workflow</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-analysis">Configuring the Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-flickerprint">Running FlickerPrint</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysing-results">Analysing results</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-number">Version number</a></li>
 </ul>

@@ -156,6 +156,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -272,6 +279,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -346,9 +360,9 @@
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out more</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out More</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../find_out_more/papers.html">FlickerPrint Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../find_out_more/citing_flickerprint.html">Citing FlickerPrint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../find_out_more/contributors.html">Contributors</a></li>
 
 </ul>
@@ -411,69 +425,94 @@
                   
   <section id="module-flickerprint.fluctuation.spectra">
 <span id="id1"></span><span id="spectrum-fitting"></span><h1>Spectrum Fitting<a class="headerlink" href="#module-flickerprint.fluctuation.spectra" title="Link to this heading">#</a></h1>
-<p>Theoretical fluctuation spectra for granules.</p>
-<section id="id2">
-<h2>Spectrum Fitting<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
-<p>Given an experimental spectrum find the best fit values of surface tension and bending
-rigidity.</p>
+<section id="faster-version-of-the-spectrum-fitting-code">
+<h2>Faster version of the spectrum fitting code<a class="headerlink" href="#faster-version-of-the-spectrum-fitting-code" title="Link to this heading">#</a></h2>
+<p>Due to the need to precalculate the constant values before the fitting, this doesn’t fit into the old workflow
+and so it has been moved into a separate file.</p>
+<blockquote>
+<div><p>We want to minimise the function</p>
+<p>F(sigma_bar, kappa, q) = sum_{l=q}^{q_max} f_ql kappa_bar</p>
+<p>f_ql(sigma_bar, kappa, q) = frac{N_ql}{(l-1)(l+2)[l(l+1) - sigma_bar]}</p>
+</div></blockquote>
+<p>We decompose this into fractions</p>
+<blockquote>
+<div><p>f_ql = frac{A(q, l)}{B(l) + C(l) sigma_bar}, where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A(q, l) = N_ql</p></li>
+<li><p>B(l) = l(l+1)(l-1)(l+2)</p></li>
+<li><p>C(l) = (l-1)(l+2)</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
 </section>
 <dl class="py class">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.FittingBendingRigidityOnlyLeastSquares">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">FittingBendingRigidityOnlyLeastSquares</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fourier_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.FittingBendingRigidityOnlyLeastSquares" title="Link to this definition">#</a></dt>
-<dd><p>use lease square method, with scan initial guess, to fit spectra and get errors</p>
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">SpectrumFitterBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">75</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder" title="Link to this definition">#</a></dt>
+<dd><p>This class contains the precomputed values used in the theoretical spectrum calculation.
+Supports vectorised sigma_bar and kappa_bar (floats or 2D numpy arrays).</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.FittingBendingRigidityOnlyLeastSquares.get_best_fit">
-<span class="sig-name descname"><span class="pre">get_best_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.FittingBendingRigidityOnlyLeastSquares.get_best_fit" title="Link to this definition">#</a></dt>
-<dd><p>Return a results tuple with the best fit parameters.</p>
-<p>In this simple implementation we use a L-BFGS minimiser however, this tends to
-perform badly when there is a neglible surface tension contribution.</p>
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder.create_fitting_function">
+<span class="sig-name descname"><span class="pre">create_fitting_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectrum_experimental</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder.create_fitting_function" title="Link to this definition">#</a></dt>
+<dd><p>Create a function that returns the error between the experimental and theoretical spectrum.</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.FittingLBFGS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">FittingLBFGS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fourier_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.FittingLBFGS" title="Link to this definition">#</a></dt>
-<dd><p>Fitting for the granules using an additional step to calculate the error bars.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.FittingLeastSquares">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">FittingLeastSquares</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fourier_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.FittingLeastSquares" title="Link to this definition">#</a></dt>
-<dd><p>use lease square method, with scan initial guess, to fit spectra and get errors</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.FittingLeastSquares.get_best_fit">
-<span class="sig-name descname"><span class="pre">get_best_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.FittingLeastSquares.get_best_fit" title="Link to this definition">#</a></dt>
-<dd><p>Return a results tuple with the best fit parameters.</p>
-<p>In this simple implementation we use a L-BFGS minimiser however, this tends to
-perform badly when there is a neglible surface tension contribution.</p>
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder.get_spectra">
+<span class="sig-name descname"><span class="pre">get_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma_bar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa_bar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder.get_spectra" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the theoretical spectrum for the given σ and κ.
+sigma_bar and kappa_bar can be floats or 2D numpy arrays of shape (N, M).
+Returns array of shape (N, M, q_max-1) if inputs are arrays, else (q_max-1,)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder.grid_scan_points">
+<span class="sig-name descname"><span class="pre">grid_scan_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_best_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder.grid_scan_points" title="Link to this definition">#</a></dt>
+<dd><p>Looks for the best starting point in <code class="docutils literal notranslate"><span class="pre">n_points</span></code> × <code class="docutils literal notranslate"><span class="pre">n_points</span></code> array and return the <code class="docutils literal notranslate"><span class="pre">n_best_points</span></code> options.</p>
+<p>Returns an array of shape (<code class="docutils literal notranslate"><span class="pre">n_best_points</span></code> × 3) with the (fitting_error, sigma, kappa) values</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.FittingSurfaceTensionOnlyLeastSquares">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">FittingSurfaceTensionOnlyLeastSquares</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fourier_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.FittingSurfaceTensionOnlyLeastSquares" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">SpectrumFitterBuilder_Br_Only</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">75</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only" title="Link to this definition">#</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.FittingSurfaceTensionOnlyLeastSquares.get_best_fit">
-<span class="sig-name descname"><span class="pre">get_best_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.FittingSurfaceTensionOnlyLeastSquares.get_best_fit" title="Link to this definition">#</a></dt>
-<dd><p>Return a results tuple with the best fit parameters.</p>
-<p>In this simple implementation we use a L-BFGS minimiser however, this tends to
-perform badly when there is a neglible surface tension contribution.</p>
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only.create_fitting_function">
+<span class="sig-name descname"><span class="pre">create_fitting_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectrum_experimental</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only.create_fitting_function" title="Link to this definition">#</a></dt>
+<dd><p>Create a function that returns the error between the experimental and theoretical spectrum.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only.get_spectra">
+<span class="sig-name descname"><span class="pre">get_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa_bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only.get_spectra" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the given theoretical spectrum for the given σ and κ.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.Result">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma_bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_tension_defined</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.Result" title="Link to this definition">#</a></dt>
-<dd><p>Storage for the fitting results.</p>
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">SpectrumFitterBuilder_ST_Only</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">75</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.create_fitting_function">
+<span class="sig-name descname"><span class="pre">create_fitting_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectrum_experimental</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.create_fitting_function" title="Link to this definition">#</a></dt>
+<dd><p>Create a function that returns the error between the experimental and theoretical spectrum.</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.numerator">
-<span class="sig-prename descclassname"><span class="pre">flickerprint.fluctuation.spectra.</span></span><span class="sig-name descname"><span class="pre">numerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.numerator" title="Link to this definition">#</a></dt>
-<dd><p>Calculate the numerator terms for spectrum, while caching the results.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.get_spectra">
+<span class="sig-name descname"><span class="pre">get_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma_bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.get_spectra" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the given theoretical spectrum for the given σ and κ.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.grid_scan_points">
+<span class="sig-name descname"><span class="pre">grid_scan_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_best_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.grid_scan_points" title="Link to this definition">#</a></dt>
+<dd><p>Looks for the best starting point in <code class="docutils literal notranslate"><span class="pre">n_points</span></code> × <code class="docutils literal notranslate"><span class="pre">n_points</span></code> array and return the <code class="docutils literal notranslate"><span class="pre">n_best_points</span></code> options.</p>
+<p>Returns an array of shape (<code class="docutils literal notranslate"><span class="pre">n_best_points</span></code> × 3) with the (fitting_error, sigma, kappa) values</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -525,22 +564,24 @@ perform badly when there is a neglible surface tension contribution.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Spectrum Fitting</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.FittingBendingRigidityOnlyLeastSquares"><code class="docutils literal notranslate"><span class="pre">FittingBendingRigidityOnlyLeastSquares</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.FittingBendingRigidityOnlyLeastSquares.get_best_fit"><code class="docutils literal notranslate"><span class="pre">FittingBendingRigidityOnlyLeastSquares.get_best_fit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#faster-version-of-the-spectrum-fitting-code">Faster version of the spectrum fitting code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder.create_fitting_function"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder.create_fitting_function()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder.get_spectra"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder.get_spectra()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder.grid_scan_points"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder.grid_scan_points()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.FittingLBFGS"><code class="docutils literal notranslate"><span class="pre">FittingLBFGS</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.FittingLeastSquares"><code class="docutils literal notranslate"><span class="pre">FittingLeastSquares</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.FittingLeastSquares.get_best_fit"><code class="docutils literal notranslate"><span class="pre">FittingLeastSquares.get_best_fit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder_Br_Only</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only.create_fitting_function"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder_Br_Only.create_fitting_function()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_Br_Only.get_spectra"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder_Br_Only.get_spectra()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.FittingSurfaceTensionOnlyLeastSquares"><code class="docutils literal notranslate"><span class="pre">FittingSurfaceTensionOnlyLeastSquares</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.FittingSurfaceTensionOnlyLeastSquares.get_best_fit"><code class="docutils literal notranslate"><span class="pre">FittingSurfaceTensionOnlyLeastSquares.get_best_fit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder_ST_Only</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.create_fitting_function"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder_ST_Only.create_fitting_function()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.get_spectra"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder_ST_Only.get_spectra()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.SpectrumFitterBuilder_ST_Only.grid_scan_points"><code class="docutils literal notranslate"><span class="pre">SpectrumFitterBuilder_ST_Only.grid_scan_points()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.fluctuation.spectra.numerator"><code class="docutils literal notranslate"><span class="pre">numerator()</span></code></a></li>
 </ul>
   </nav></div>
 

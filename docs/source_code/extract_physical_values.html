@@ -156,6 +156,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -272,6 +279,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../find_out_more/citing_flickerprint.html">
+    Citing FlickerPrint
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -346,9 +360,9 @@
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out more</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Find Out More</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../find_out_more/papers.html">FlickerPrint Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../find_out_more/citing_flickerprint.html">Citing FlickerPrint</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../find_out_more/contributors.html">Contributors</a></li>
 
 </ul>
@@ -425,38 +439,16 @@ several experiments and create summaries of the data.</p>
 this we calculate the best estimates for the physical values, typically the surface
 tension and bending rigidity.</p>
 <p>This is saved in a summary table, with other metadata about the granules, this
-includes properties of the granule such as its size or the time since treatment,
-but also abstract parameters, such as the quality of fitting to the expected
+includes properties of the granule such as its size or the time since treatment,</p>
+<blockquote>
+<div><p>input_path = Path(frame_info[“input_path”])</p>
+</div></blockquote>
+<p>but also abstract parameters, such as the quality of fitting to the expected
 spectrum.</p>
 <p>Once the summary table is created, we add a number of secondary columns for
 convenience, typically physical values re-scaled by some factor or on a log
 scale. We also bin the time values into 5 minute intervals that can be used for
 aggregation/averaging.</p>
-<p>As the fitting is somewhat expensive, we provide an option for reusing the
-summary table . This can be cleared by using the <code class="docutils literal notranslate"><span class="pre">--clear</span></code> flag, and new data
-will be generated.</p>
-</section>
-<section id="merge-caches">
-<h2>Merge Caches<a class="headerlink" href="#merge-caches" title="Link to this heading">#</a></h2>
-<p>Once we have gathered all of the data in an experiment directory, we can then analyse
-these files together using the <code class="docutils literal notranslate"><span class="pre">merge_caches</span></code> function. We provide means for dealing
-with mismatched or missing columns.</p>
-<p>Simply provide a list of <code class="docutils literal notranslate"><span class="pre">Path</span></code> objects pointing to the <code class="docutils literal notranslate"><span class="pre">fittingVals.csv</span></code> files to
-merge.</p>
-</section>
-<section id="flags">
-<h2>Flags<a class="headerlink" href="#flags" title="Link to this heading">#</a></h2>
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">--all-frames</span></code></dt><dd><p>Do not remove frames that have failed the boundary check when fitting
-for a granule. The pass rate is still recorded with the granule and may be used to
-filter the entire granule from later analysis.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">-j</span></code>, <code class="docutils literal notranslate"><span class="pre">--processes</span></code><span class="classifier">1</span></dt><dd><p>Number of cores to run the fittings on; with each core running a different time
-series. Defaults to single core for debugging, but multiple cores are recommended.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">--clear</span></code></dt><dd><p>Recreate the <code class="docutils literal notranslate"><span class="pre">fittingVals.csv</span></code> file.</p>
-</dd>
-</dl>
 </section>
 <dl class="py function">
 <dt class="sig sig-object py" id="flickerprint.workflow.extract_physical_values.main">
@@ -466,8 +458,21 @@ series. Defaults to single core for debugging, but multiple cores are recommende
 
 <dl class="py function">
 <dt class="sig sig-object py" id="flickerprint.workflow.extract_physical_values.process_fourier_file">
-<span class="sig-prename descclassname"><span class="pre">flickerprint.workflow.extract_physical_values.</span></span><span class="sig-name descname"><span class="pre">process_fourier_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.workflow.extract_physical_values.process_fourier_file" title="Link to this definition">#</a></dt>
-<dd><p>Perform spectrum fitting on one h5 file.</p>
+<span class="sig-prename descclassname"><span class="pre">flickerprint.workflow.extract_physical_values.</span></span><span class="sig-name descname"><span class="pre">process_fourier_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fourier_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotting</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_pbar_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flickerprint.workflow.extract_physical_values.process_fourier_file" title="Link to this definition">#</a></dt>
+<dd><section id="perform-the-spectrum-fitting-on-one-h5-file-corresponding-to-one-time-series-image">
+<h2>Perform the spectrum fitting on one .h5 file corresponding to one time series image.<a class="headerlink" href="#perform-the-spectrum-fitting-on-one-h5-file-corresponding-to-one-time-series-image" title="Link to this heading">#</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>one line per granule including sigma/kappa estimates
+- <code class="docutils literal notranslate"><span class="pre">magnitude_df</span></code>: one line per order per granule, contains the fluctuation/fixed spectrum</p>
+</dd>
+<dt class="field-even">rtype<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">property_df</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 </section>
@@ -521,8 +526,6 @@ series. Defaults to single core for debugging, but multiple cores are recommende
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outline">Outline</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#merge-caches">Merge Caches</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags">Flags</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.workflow.extract_physical_values.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flickerprint.workflow.extract_physical_values.process_fourier_file"><code class="docutils literal notranslate"><span class="pre">process_fourier_file()</span></code></a></li>
 </ul>
