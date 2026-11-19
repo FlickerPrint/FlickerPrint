@@ -5,7 +5,7 @@ from pathlib import Path
 
 from shiny import App, Inputs, Outputs, Session, render, ui, module, reactive
 from shiny.types import FileInfo
-from time import sleep
+
 
 @module.ui
 def image_upload_module_ui():
@@ -23,20 +23,31 @@ def image_upload_module_ui():
     )
 
 @module.server
-def image_upload_module_server(input: Inputs, output: Outputs, session: render) -> reactive.Value[list[int]]:
-    uploaded_file = reactive.Value()
+def image_upload_module_server(input: Inputs, output: Outputs, session: render):
+    uploaded_file = reactive.Value({})
 
-    @reactive.Effect
+    @reactive.effect
     @reactive.event(input.Microscope_Video)
     def set_uploaded_file():
         """
-            Gives the file paths of the uploaded microscope video files, to be read in later.
-            Sets the results to the reactive value container.
-        """
-        f: list[FileInfo] = input.Microscope_Video()
-        # Map original filenames to their temporary datapaths
-        files: dict[str, str] = {fi["name"]: fi["datapath"] for fi in f}
-        uploaded_file.set(files)
+        Gives the file paths of the uploaded microscope video files, to be read in later.
+        Cleans up previously uploaded files from disk, then sets the new files.
+        """  
+        f = input.Microscope_Video()
+
+        old_files = uploaded_file.get()
         
+        if old_files:
+            for _name, old_path in old_files.items():
+                p = Path(old_path)
+                if p.exists():
+                    try:
+                        p.unlink()
+                    except Exception as e:
+                        continue
+
+        new_files = {fi["name"]: fi["datapath"] for fi in f}
+        
+        uploaded_file.set(new_files)
 
     return uploaded_file

@@ -304,9 +304,12 @@ def process_single_image(
 
         # Show the heatmap of the image
         if plot:
-            fig, axs = pt.create_axes(2)
-            detector.plot(axs[0])
-            axs[1].imshow(frame.im_data)
+            fig, axs = pt.create_axes(2, fig_width=172/25.4)
+            detector.plot(axs[1], cmap='gray')
+            axs[0].imshow(frame.im_data, cmap="gray")
+            axs[0].set_title(f"Raw Image")
+            axs[1].set_title(f"Detected Condensates")
+            # pt.add_scalebar(axs[0], frame.pixel_size, include_label=False, scale_bar_inside=True)
             plot_save_name = (
                 output_dir
                 / f"tracking/detection/{input_image.stem}--F{frame_num:03d}.png"

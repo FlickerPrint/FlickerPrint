@@ -210,7 +210,8 @@ def save_figure_and_trim(
     tl_padding=1.08,
     fig=None,
     despine=True,
-    dpi=330,
+    dpi=400,
+    transparent=False,
 ):
     """ Save the figure with metadata and crop the boundaries. """
 
@@ -242,7 +243,7 @@ def save_figure_and_trim(
         plotKwargs = dict(bbox_inches="tight", pad_inches=padding)
 
     fig.tight_layout(pad=tl_padding)
-    fig.savefig(save_name, dpi=dpi, **plotKwargs, metadata=metadata)
+    fig.savefig(save_name, dpi=dpi, **plotKwargs, metadata=metadata, transparent=transparent)
     plt.close(fig=fig)
 
 
@@ -272,6 +273,37 @@ def cart2polar(point):
 def create_figure_directory(name) -> Path:
     """ Create a figure directory within the project structure. """
     print(gec.__file__)
+
+def add_scalebar(ax: plt.Axes, pixel_size: float, max_length_fraction: float = 0.2, max_length_absolute: float = None, include_label: bool = True, scale_bar_inside: bool = True):
+    """ Add a scale bar to the current axis. """
+    image_width = (ax.get_xlim()[1] - ax.get_xlim()[0]) * pixel_size
+    if max_length_absolute is not None:
+        max_length = max_length_absolute
+    else:
+        max_length = max_length_fraction * image_width
+
+    nice_lengths = np.array([1, 2, 5, 10, 20, 50, 100, 200, 500, 1000])
+    scalebar_length_um = nice_lengths[nice_lengths <= max_length].max()
+
+    scalebar_length_pixels = scalebar_length_um / pixel_size
+
+    ax.hlines(
+        y=ax.get_ylim()[0] + 0.05 * (ax.get_ylim()[1] - ax.get_ylim()[0]) if scale_bar_inside else ax.get_ylim()[0] - 0.05 * (ax.get_ylim()[1] - ax.get_ylim()[0]),
+        xmin=ax.get_xlim()[1] - scalebar_length_pixels - 0.05 * (ax.get_xlim()[1] - ax.get_xlim()[0]),
+        xmax=ax.get_xlim()[1] - 0.05 * (ax.get_xlim()[1] - ax.get_xlim()[0]),
+        colors="white" if scale_bar_inside else "black",
+        linewidth=2,
+    )
+
+    if include_label:
+        ax.text(
+            x=ax.get_xlim()[1] - scalebar_length_pixels / 2 - 0.05 * (ax.get_xlim()[1] - ax.get_xlim()[0]),
+            y=ax.get_ylim()[0] + 0.1 * (ax.get_ylim()[1] - ax.get_ylim()[0]) if scale_bar_inside else ax.get_ylim()[0] - 0.1 * (ax.get_ylim()[1] - ax.get_ylim()[0]),
+            s=f"{scalebar_length_um:.1f} μm",
+            color="white" if scale_bar_inside else "black",
+            ha="center",
+            va="bottom",
+        )
 
 
 save = save_figure_and_trim

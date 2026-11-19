@@ -48,7 +48,7 @@ app_ui = ui.page_fluid(
 # Server
 def server(input, output, session):
     # Handle file upload
-    microscope_image_reactive_value: reactive.Value[list[int]] = image_upload_module_server("global_file_upload")#TODO change the type here.
+    microscope_image_reactive_value: reactive.Value[list[int]] = image_upload_module_server(id = "global_file_upload")
 
     # Handle config upload
     config_params_reactive_value: reactive.Value[dict] = config_upload_module_server(id="global_config_upload")
