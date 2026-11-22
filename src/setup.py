@@ -285,7 +285,7 @@ with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'README.md'),
         description_content = "".join(lines)
 
 setup(name='flickerprint',
-      version='1.0',
+      version='1.1.0',
       author='Carl Jones, Jack Law, Thomas Williamson, Fynn Wolf, Endre Tønnessen',
       maintainer='Thomas Williamson',
       description='FlickerPrint: Non-invasive measurement of biomolecular condensate mechanical properties from confocal microscopy images.',
